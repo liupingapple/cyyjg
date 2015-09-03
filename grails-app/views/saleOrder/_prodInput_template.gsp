@@ -1,0 +1,2 @@
+<%@page import="cyyjg.SaleOrder"%>
+<g:select id="prodInput" name="prod.id" from="${searchedProdList?searchedProdList:cyyjg.Prod.findAllByCust(saleOrderObj?.cust?saleOrderObj?.cust:cust, [max:50])}" optionKey="id" required="" value=""/>
