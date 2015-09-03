@@ -24,36 +24,32 @@
 				<thead>
 					<tr>
 					
-						<g:sortableColumn property="code" title="${message(code: 'prod.code.label', default: 'Code')}" />
+						<g:sortableColumn property="custRefCode" title="${message(code: 'prod.custRefCode.label', default: 'Cust Ref Code')}" />
+						<g:sortableColumn property="code" title="${message(code: 'prod.code.label', default: 'Code')}" />		
 					
-						<g:sortableColumn property="iterStdCode" title="${message(code: 'prod.iterStdCode.label', default: 'Iter Std Code')}" />
-					
-						<g:sortableColumn property="name" title="${message(code: 'prod.name.label', default: 'Name')}" />
-					
-						<g:sortableColumn property="type" title="${message(code: 'prod.type.label', default: 'Type')}" />
-					
-						<th><g:message code="prod.group.label" default="Group" /></th>
-					
-						<g:sortableColumn property="stdCost" title="${message(code: 'prod.stdCost.label', default: 'Std Cost')}" />
-					
+						<th><g:message code="prod.cust.label" default="Cust" /></th>					
+						<th><g:message code="prodBase.code.label" default="Code" /></th>
+						<th><g:message code="prodBase.name.label" default="Name" /></th>
+						<th><g:message code="prod.rootBomStdId.label" default="rootBomStdId" /></th>					
 					</tr>
 				</thead>
 				<tbody>
 				<g:each in="${prodObjList}" status="i" var="prodObj">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
+						<td><g:link action="show" id="${prodObj.id}">${fieldValue(bean: prodObj, field: "custRefCode")}</g:link></td>
 						<td><g:link action="show" id="${prodObj.id}">${fieldValue(bean: prodObj, field: "code")}</g:link></td>
+						<td>${fieldValue(bean: prodObj, field: "cust")}</td>
 					
-						<td>${fieldValue(bean: prodObj, field: "iterStdCode")}</td>
-					
-						<td>${fieldValue(bean: prodObj, field: "name")}</td>
-					
-						<td>${fieldValue(bean: prodObj, field: "type")}</td>
-					
-						<td>${fieldValue(bean: prodObj, field: "group")}</td>
-					
-						<td>${fieldValue(bean: prodObj, field: "stdCost")}</td>
-					
+						<td>${fieldValue(bean: prodObj, field: "prodBase.code")}</td>										
+						<td>${fieldValue(bean: prodObj, field: "prodBase.name")}</td>
+						<g:if test="${prodObj.rootBomStdId }">
+							<td><g:link controller="bomStd" action="edit" id="${prodObj.rootBomStdId}">查看标准BOM - ${prodObj.rootBomStdId}</g:link></td>
+						</g:if>
+						<g:else>
+							<%-- no need to use ${} for params=..., like params = ${['prod.id': prodObj.id] } --%>
+							<td><g:link controller="bomStd" action="create" params="['prod.id' : prodObj?.id]">创建标准BOM</g:link></td>
+						</g:else>
 					</tr>
 				</g:each>
 				</tbody>

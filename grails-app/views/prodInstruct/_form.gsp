@@ -18,12 +18,12 @@
 	<g:select id="saleOrderLine" name="saleOrderLine.id" from="${cyyjg.SaleOrderLine.list()}" optionKey="id" required="" value="${prodInstructObj?.saleOrderLine?.id}" class="many-to-one"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: prodInstructObj, field: 'bomProduce', 'error')} ">
-	<label for="bomProduce">
-		<g:message code="prodInstruct.bomProduce.label" default="Bom Produce" />
+<div class="fieldcontain ${hasErrors(bean: prodInstructObj, field: 'bomActual', 'error')} ">
+	<label for="bomActual">
+		<g:message code="prodInstruct.bomActual.label" default="Bom Actual" />
 		
 	</label>
-	<g:select id="bomProduce" name="bomProduce.id" from="${cyyjg.BomProduce.list()}" optionKey="id" value="${prodInstructObj?.bomProduce?.id}" class="many-to-one" noSelection="['null': '']"/>
+	<g:select id="bomActual" name="bomActual.id" from="${cyyjg.BomActual.list()}" optionKey="id" value="${prodInstructObj?.bomActual?.id}" class="many-to-one" noSelection="['null': '']"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: prodInstructObj, field: 'lastOne', 'error')} ">

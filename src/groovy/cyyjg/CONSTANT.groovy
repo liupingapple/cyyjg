@@ -1,5 +1,7 @@
 package cyyjg
 
+import java.util.ArrayList;
+
 class CONSTANT {	
 	final static PROD_TYPEs = ['原材料', '半成品', '成品', '包装品']
 	final static PROD_INVENTORY_TYPEs = ['原材料', '半成品', '成品', '废品', '包装品']
@@ -16,4 +18,41 @@ class CONSTANT {
 	final static ORDER_STATUSes = ['新建', '确认', '已备料', '生产中', '完成可送货']
 	
 	final static UNITs = ['克', '千克']
+	
+	final static ArrayList PROVINCEs = [
+		'安徽',
+		'北京',
+		'重庆',
+		'福建',
+		'甘肃',
+		'广东',
+		'广西',
+		'贵州',
+		'海南',
+		'河北',
+		'黑龙江',
+		'河南',
+		'香港',
+		'湖北',
+		'湖南',
+		'江苏',
+		'江西',
+		'吉林',
+		'辽宁',
+		'澳门',
+		'内蒙古',
+		'宁夏',
+		'青海',
+		'山东',
+		'上海',
+		'山西',
+		'陕西',
+		'四川',
+		'天津',
+		'台湾',
+		'新疆',
+		'西藏',
+		'云南',
+		'浙江'
+	]
 }

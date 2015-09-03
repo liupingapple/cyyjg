@@ -7,7 +7,7 @@ class ProdInstruct {
 	
 	SaleOrderLine saleOrderLine // 一个领料单会对应多个销售单吗？？？似乎不会
 
-	BomProduce bomProduce
+	BomActual bomActual
 			
 	ProdInstruct lastOne // 上次生产的指令单， 包含 lastBomProduce
 	
@@ -21,7 +21,7 @@ class ProdInstruct {
     static constraints = {
 		code unique:true
 		saleOrderLine nullable:false
-		bomProduce nullable:true
+		bomActual nullable:true
 		lastOne nullable:true
 		status inList:['新建', '正在实验', '正在生产', '生成完成', '关闭']
 		comment nullable:true, maxSize:1000

@@ -26,13 +26,13 @@
 					
 						<th><g:message code="saleOrderLine.saleOrder.label" default="Sale Order" /></th>
 					
-						<g:sortableColumn property="seq" title="${message(code: 'saleOrderLine.seq.label', default: 'Seq')}" />
-					
 						<th><g:message code="saleOrderLine.prod.label" default="Prod" /></th>
 					
 						<g:sortableColumn property="quantity" title="${message(code: 'saleOrderLine.quantity.label', default: 'Quantity')}" />
 					
 						<g:sortableColumn property="unit" title="${message(code: 'saleOrderLine.unit.label', default: 'Unit')}" />
+					
+						<g:sortableColumn property="price" title="${message(code: 'saleOrderLine.price.label', default: 'Price')}" />
 					
 						<th><g:message code="saleOrderLine.prodBatch.label" default="Prod Batch" /></th>
 					
@@ -44,13 +44,13 @@
 					
 						<td><g:link action="show" id="${saleOrderLineObj.id}">${fieldValue(bean: saleOrderLineObj, field: "saleOrder")}</g:link></td>
 					
-						<td>${fieldValue(bean: saleOrderLineObj, field: "seq")}</td>
-					
 						<td>${fieldValue(bean: saleOrderLineObj, field: "prod")}</td>
 					
 						<td>${fieldValue(bean: saleOrderLineObj, field: "quantity")}</td>
 					
 						<td>${fieldValue(bean: saleOrderLineObj, field: "unit")}</td>
+					
+						<td>${fieldValue(bean: saleOrderLineObj, field: "price")}</td>
 					
 						<td>${fieldValue(bean: saleOrderLineObj, field: "prodBatch")}</td>
 					

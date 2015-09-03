@@ -9,10 +9,22 @@ class ProdController {
     def index() {
         redirect(action: "list", params: params)
     }
+	
+	def showProdBase()
+	{
+		println "params is: ${params}"
+		ProdBase pbase = ProdBase.get(params.prodBaseId)
+		render(template:"prodBaseItems", model:[prodBaseObj:pbase])
+	}
 
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [prodObjList: Prod.list(params), prodObjTotal: Prod.count()]
+		
+		def prodList = Prod.where {
+			rootBomStdId > 0
+		}.list(params)
+		
+        [prodObjList: prodList, prodObjTotal: Prod.count()]
     }
 
     def create() {
@@ -20,6 +32,15 @@ class ProdController {
     }
 
     def save() {
+		println "params: ${params}"
+		Customer cust = Customer.load(params['cust.id'])
+		ProdBase prodBase = ProdBase.load(params['prodBase.id'])
+		
+		if (params.custRefCode?.contains("由系统生成")) {
+			params.custRefCode = cust.code+"-"+prodBase.code
+		}
+		params.code = params.custRefCode
+		
         def prodObj = new Prod(params)
         if (!prodObj.save(flush: true)) {
             render(view: "create", model: [prodObj: prodObj])
@@ -98,5 +119,5 @@ class ProdController {
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'prod.label', default: 'Prod'), id])
             redirect(action: "show", id: id)
         }
-    }
+    }	
 }

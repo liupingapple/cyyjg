@@ -30,11 +30,10 @@
 							</ul>
 						</g:hasErrors>
 						
-						<g:form action="save" >
+						<g:form name="orderCreateForm" method="post" >
 							<fieldset>
 								<g:render template="form"/>
 							</fieldset>
-							<g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />					
 						</g:form>
 
                     </div>

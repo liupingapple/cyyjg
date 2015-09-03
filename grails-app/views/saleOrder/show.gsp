@@ -25,23 +25,15 @@
 						</g:if>
 						
 						<div class="panel panel-default">
-						<div class="panel-heading text-left"><g:message code="default.show.label" args="[entityName]" /></div>
+						<div class="panel-heading text-left"><g:message code="default.show.label" args="[entityName]" />: ${saleOrderObj.code} </div>
 						<table class="table text-left">
 						<tr>
-							<!-- column -->
-    						<td class="text-right">
-								<span id="code-label" class="property-label"><g:message code="saleOrder.code.label" default="Code" /></span>
-							</td>
-							<td>
-								<span class="property-value" aria-labelledby="code-label"><g:fieldValue bean="${saleOrderObj}" field="code"/></span>								
-							</td>
-						
 							<!-- column -->
     						<td class="text-right">
 								<span id="cust-label" class="property-label"><g:message code="saleOrder.cust.label" default="Cust" /></span>
 							</td>
 							<td>	
-									<span class="property-value" aria-labelledby="cust-label"><g:link controller="customer" action="show" id="${saleOrderObj?.cust?.id}">${saleOrderObj?.cust?.encodeAsHTML()}</g:link></span>								
+								<span class="property-value" aria-labelledby="cust-label"><g:link controller="customer" action="show" id="${saleOrderObj?.cust?.id}">${saleOrderObj?.cust?.encodeAsHTML()}</g:link></span>								
 							</td>
 						
 							<!-- column -->
@@ -51,8 +43,15 @@
 							<td>			
 								<span class="property-value" aria-labelledby="status-label"><g:fieldValue bean="${saleOrderObj}" field="status"/></span>								
 							</td>
-						</tr>
-						<tr>
+							
+							<!-- column -->
+    						<td class="text-right">
+								<span id="orderSource-label" class="property-label"><g:message code="saleOrder.orderSource.label" default="OrderSource" /></span>
+							</td>
+							<td>			
+								<span class="property-value" aria-labelledby="orderSource-label">${saleOrderObj?.orderSource?.encodeAsHTML()}</span>								
+							</td>
+
 							<!-- column -->
     						<td class="text-right">
 								<span id="signDate-label" class="property-label"><g:message code="saleOrder.signDate.label" default="Sign Date" /></span>
@@ -60,24 +59,18 @@
 							<td>	
 								<span class="property-value" aria-labelledby="signDate-label"><g:formatDate date="${saleOrderObj?.signDate}" format="yyyy-MM-dd"/></span>								
 							</td>
-							
-							<!-- column -->
-    						<td class="text-right">
-								<span id="deliveryDate-label" class="property-label"><g:message code="saleOrder.deliveryDate.label" default="Delivery Date" /></span>
-							</td>
-							<td colspan="5">	
-								<span class="property-value" aria-labelledby="deliveryDate-label"><g:formatDate date="${saleOrderObj?.deliveryDate}" format="yyyy-MM-dd" /></span>								
-							</td>
 						</tr>
+						<g:if test="${saleOrderObj.comment }">
 						<tr>						
 							<!-- column -->
     						<td class="text-right">
 								<span id="comment-label" class="property-label"><g:message code="saleOrder.comment.label" default="Comment" /></span>
 							</td>
-							<td colspan="7">	
+							<td colspan="5">	
 								<span class="property-value" aria-labelledby="comment-label"><g:fieldValue bean="${saleOrderObj}" field="comment"/></span>								
 							</td>						
 						</tr>
+						</g:if>
 						
 						<tr>
 							<td colspan="8" class="text-center">

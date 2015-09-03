@@ -10,14 +10,6 @@
 	<g:select id="saleOrder" name="saleOrder.id" from="${cyyjg.SaleOrder.list()}" optionKey="id" required="" value="${saleOrderLineObj?.saleOrder?.id}" class="many-to-one"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: saleOrderLineObj, field: 'seq', 'error')} ">
-	<label for="seq">
-		<g:message code="saleOrderLine.seq.label" default="Seq" />
-		
-	</label>
-	<g:textField name="seq" value="${saleOrderLineObj?.seq}"/>
-</div>
-
 <div class="fieldcontain ${hasErrors(bean: saleOrderLineObj, field: 'prod', 'error')} required">
 	<label for="prod">
 		<g:message code="saleOrderLine.prod.label" default="Prod" />
@@ -40,6 +32,14 @@
 		
 	</label>
 	<g:select name="unit" from="${saleOrderLineObj.constraints.unit.inList}" value="${saleOrderLineObj?.unit}" valueMessagePrefix="saleOrderLine.unit" noSelection="['': '']"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: saleOrderLineObj, field: 'price', 'error')} required">
+	<label for="price">
+		<g:message code="saleOrderLine.price.label" default="Price" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:field name="price" value="${fieldValue(bean: saleOrderLineObj, field: 'price')}" required=""/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: saleOrderLineObj, field: 'prodBatch', 'error')} ">

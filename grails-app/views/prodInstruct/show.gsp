@@ -41,11 +41,11 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${prodInstructObj?.bomProduce}">
+				<g:if test="${prodInstructObj?.bomActual}">
 				<li class="fieldcontain">
-					<span id="bomProduce-label" class="property-label"><g:message code="prodInstruct.bomProduce.label" default="Bom Produce" /></span>
+					<span id="bomActual-label" class="property-label"><g:message code="prodInstruct.bomActual.label" default="Bom Actual" /></span>
 					
-						<span class="property-value" aria-labelledby="bomProduce-label"><g:link controller="bomProduce" action="show" id="${prodInstructObj?.bomProduce?.id}">${prodInstructObj?.bomProduce?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="bomActual-label"><g:link controller="bomActual" action="show" id="${prodInstructObj?.bomActual?.id}">${prodInstructObj?.bomActual?.encodeAsHTML()}</g:link></span>
 					
 				</li>
 				</g:if>

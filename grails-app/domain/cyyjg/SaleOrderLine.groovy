@@ -4,11 +4,12 @@ import java.util.Date;
 
 class SaleOrderLine {
 	
-	String seq
 	Prod prod
 	ProdBatch prodBatch
 	BigDecimal quantity
 	String unit = '克'
+	
+	BigDecimal price
 	
 	Date deliveryDate
 	
@@ -20,11 +21,12 @@ class SaleOrderLine {
 	static belongsTo = [saleOrder:SaleOrder]
 	
     static constraints = {
-		saleOrder()
-		seq nullable:false
-		prod nullable:false
+		// 如何定义一个 prod 和 一个 saleOrder 唯一性？
+		saleOrder(unique:['prod'])
+		prod (nullable:false)
 		quantity nullable:false
 		unit inList:cyyjg.CONSTANT.UNITs
+		price nullable:false
 		prodBatch nullable:true
 		
 		deliveryDate nullable:true
@@ -33,6 +35,6 @@ class SaleOrderLine {
 	
 	@Override
 	String toString() {
-		seq+": "+prod+""
+		"${saleOrder.code} - ${prod}"
 	}
 }

@@ -64,7 +64,7 @@
 							<div class="message">${flash.message}</div>
 						</g:if>
 					
-						<g:form class="form-signin" action="authenticate" method="post">
+						<g:form name="signin_form" class="form-signin" action="authenticate" method="post">
 							<h3 class="form-signin-heading">请登录</h3> <!-- class sr-only 会隐藏-->
 							<label for="inputEmail">User Name</label> 
 							<!-- not to use type="email" -->
@@ -76,7 +76,7 @@
 								
 							<div class="checkbox">
 							  <label>
-							    <input name="rememberMe" type="checkbox" value="remember-me"> Remember me
+							    <input name="rememberMe" type="checkbox" value="remember-me" checked="checked"> Remember me
 							  </label>
 							</div>
 							<button class="btn btn-lg btn-primary btn-block" id="signin" type="submit">Sign in</button>
@@ -93,23 +93,22 @@
 	
 	<script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.cookie.js')}"></script>
 	<script type="text/javascript">		
-		$(function() {
-
-			if ($.cookie("cyyjg_userName")) {
+		$(function() {			
+			if ($.cookie("cyyjg_userName") != 'null') {
 				$("[name='userName']").attr("value", $.cookie("cyyjg_userName"))
 			}
 
-			if ($.cookie("cyyjg_password")) {
+			if ($.cookie("cyyjg_password" != 'null')) {
 				$("[name='password']").attr("value", $.cookie("cyyjg_password"))
 			}
 
 			// doesn't work, why?
-			$("[name='userName']").change("propertychange", function(){
+			/*$("[name='userName']").change("propertychange", function(){
 					$("[name='password']").attr("value","");
 				}				
-			);
+			);*/
 			
-			$('form').submit(function(){
+			$($("[name='signin_form']")).submit(function(){
 				if ($("[name='rememberMe']").is(':checked')) {
 					$.cookie("cyyjg_userName", $("[name='userName']").val(), {expires:200, path: '/cyyjg'});  
 					$.cookie("cyyjg_password", $("[name='password']").val(), {expires:200, path: '/cyyjg'}); 										

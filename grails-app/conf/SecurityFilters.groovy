@@ -4,11 +4,16 @@ class SecurityFilters {
 	def filters = {
 		// At any Controllers and Actions, if NO user log in, just redirect to login page
 		loginCheck(controller: '*', action: '*') {
-			before = {
+			before = {		
 				if (!session.user && actionName != "login" && actionName != "authenticate") {
 					flash.message = "请先登录!"
 					redirect(controller: "endUser", action: "login")
-					return false
+					
+					if (actionName) {
+						return false // must return false if actionName has value, otherwise will get CannotRedirectException - A previous call to redirect(..) has already redirected the response.
+					} else {
+						// do nothing if no actionName  // don't return false, otherwise, we will get 'HTTP Status 404 - "/index.gsp" not found..' for /cyyjg
+					}
 				}
 			}
 		}
@@ -24,4 +29,5 @@ class SecurityFilters {
 			}
 		}
 	}
+	
 }

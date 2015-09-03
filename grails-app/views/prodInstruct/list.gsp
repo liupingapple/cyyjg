@@ -28,7 +28,7 @@
 					
 						<th><g:message code="prodInstruct.saleOrderLine.label" default="Sale Order Line" /></th>
 					
-						<th><g:message code="prodInstruct.bomProduce.label" default="Bom Produce" /></th>
+						<th><g:message code="prodInstruct.bomActual.label" default="Bom Actual" /></th>
 					
 						<th><g:message code="prodInstruct.lastOne.label" default="Last One" /></th>
 					
@@ -46,7 +46,7 @@
 					
 						<td>${fieldValue(bean: prodInstructObj, field: "saleOrderLine")}</td>
 					
-						<td>${fieldValue(bean: prodInstructObj, field: "bomProduce")}</td>
+						<td>${fieldValue(bean: prodInstructObj, field: "bomActual")}</td>
 					
 						<td>${fieldValue(bean: prodInstructObj, field: "lastOne")}</td>
 					

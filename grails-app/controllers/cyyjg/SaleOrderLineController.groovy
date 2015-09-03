@@ -16,8 +16,6 @@ class SaleOrderLineController {
     }
 
     def create() {
-		SaleOrder order = SaleOrder.get(params['saleOrder.id'])
-		params.seq = SaleOrderLine.countBySaleOrder(order) + 1
         [saleOrderLineObj: new SaleOrderLine(params)]
     }
 

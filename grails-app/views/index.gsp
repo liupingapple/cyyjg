@@ -1,3 +1,3 @@
 <!DOCTYPE html>
-<g:include controller="endUser" action="login"/>
+<g:include controller="saleOrder" action="list"/>
 </html>

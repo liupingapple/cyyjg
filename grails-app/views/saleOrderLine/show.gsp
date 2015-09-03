@@ -32,15 +32,6 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${saleOrderLineObj?.seq}">
-				<li class="fieldcontain">
-					<span id="seq-label" class="property-label"><g:message code="saleOrderLine.seq.label" default="Seq" /></span>
-					
-						<span class="property-value" aria-labelledby="seq-label"><g:fieldValue bean="${saleOrderLineObj}" field="seq"/></span>
-					
-				</li>
-				</g:if>
-			
 				<g:if test="${saleOrderLineObj?.prod}">
 				<li class="fieldcontain">
 					<span id="prod-label" class="property-label"><g:message code="saleOrderLine.prod.label" default="Prod" /></span>
@@ -64,6 +55,15 @@
 					<span id="unit-label" class="property-label"><g:message code="saleOrderLine.unit.label" default="Unit" /></span>
 					
 						<span class="property-value" aria-labelledby="unit-label"><g:fieldValue bean="${saleOrderLineObj}" field="unit"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${saleOrderLineObj?.price}">
+				<li class="fieldcontain">
+					<span id="price-label" class="property-label"><g:message code="saleOrderLine.price.label" default="Price" /></span>
+					
+						<span class="property-value" aria-labelledby="price-label"><g:fieldValue bean="${saleOrderLineObj}" field="price"/></span>
 					
 				</li>
 				</g:if>

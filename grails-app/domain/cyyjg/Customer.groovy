@@ -8,7 +8,7 @@ class Customer {
 	String name
 	String abrrName 
 	
-	String country
+	String country = "中国"
 	String province
 	String city
 	String addr
@@ -48,7 +48,7 @@ class Customer {
 		name()
 		abrrName nullable: true
 		country nullable:true
-		province nullable:true
+		province nullable:true, inList:CONSTANT.PROVINCEs
 		city nullable: true
 		addr nullable: true
 		contactInfo nullable:true

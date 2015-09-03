@@ -27,13 +27,15 @@
 									<g:sortableColumn property="code" title="${message(code: 'saleOrder.code.label', default: 'Code')}" />
 								
 									<th><g:message code="saleOrder.cust.label" default="Cust" /></th>
-								
+									
+									<th><g:message code="saleOrder.orderSource.label" default="orderSource" /></th>
+																	
 									<g:sortableColumn property="status" title="${message(code: 'saleOrder.status.label', default: 'Status')}" />
 								
 									<g:sortableColumn property="signDate" title="${message(code: 'saleOrder.signDate.label', default: 'Sign Date')}" />
-								
+									<%--
 									<g:sortableColumn property="deliveryDate" title="${message(code: 'saleOrder.deliveryDate.label', default: 'Delivery Date')}" />
-								
+								 --%>
 									<g:sortableColumn property="comment" title="${message(code: 'saleOrder.comment.label', default: 'Comment')}" />
 								
 								</tr>
@@ -45,13 +47,15 @@
 									<td><g:link action="show" id="${saleOrderObj.id}">${fieldValue(bean: saleOrderObj, field: "code")}</g:link></td>
 								
 									<td>${fieldValue(bean: saleOrderObj, field: "cust")}</td>
+									
+									<td>${fieldValue(bean: saleOrderObj, field: "orderSource")}</td>
 								
 									<td>${fieldValue(bean: saleOrderObj, field: "status")}</td>
 								
 									<td><g:formatDate date="${saleOrderObj.signDate}" /></td>
-								
+								<%--
 									<td><g:formatDate date="${saleOrderObj.deliveryDate}" /></td>
-								
+								 --%>
 									<td>${fieldValue(bean: saleOrderObj, field: "comment")}</td>
 								
 								</tr>

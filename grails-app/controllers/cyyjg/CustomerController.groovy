@@ -20,6 +20,7 @@ class CustomerController {
     }
 
     def save() {
+		params.code = 'cust'+(Customer.list()*.id?.max()+1)
         def customerObj = new Customer(params)
         if (!customerObj.save(flush: true)) {
             render(view: "create", model: [customerObj: customerObj])

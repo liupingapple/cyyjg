@@ -61,14 +61,12 @@
 		        		<li class="dropdown">
 				          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">基础信息管理<span class="caret"></span></a>
 				          <ul class="dropdown-menu">
-				            <li><g:link controller="prod" action="list">产品信息维护</g:link></li>
-				            <li><g:link controller="bomEng" action="list">产品BOM维护</g:link></li>
-				            <li><g:link controller="prodGroup" action="list">产品组别维护</g:link></li>
-				            <li><g:link controller="prod" action="listBycatalog">产品类别维护</g:link></li>
-				            <li><g:link controller="prodCust" action="list">产品客户维护</g:link></li>
+				            <li><g:link controller="prodBase" action="list">产品定义</g:link></li>
+				            <li><g:link controller="customer" action="list">客户信息定义</g:link></li>
+				            <li><g:link controller="prod" action="list">客户产品定义</g:link></li>
+				            <li><g:link controller="prodGroup" action="list">产品组别定义</g:link></li>
 				            <li role="separator" class="divider"></li>
-				            <li><g:link controller="customer" action="list">客户信息维护</g:link></li>
-				            <li><g:link controller="inventory" action="list">仓库信息维护</g:link></li>
+				            <%--<li><g:link controller="prodInventory" action="list">仓库信息维护</g:link></li> --%>
 				            <li><g:link controller="endUser" action="list">用户信息维护</g:link></li>
 				          </ul>
 				        </li>
@@ -85,16 +83,16 @@
 		</nav>
 		
 		<g:layoutBody /> 
-		
-		<hr class="footer-divider">
-	    	    
-		<footer class="footer" style="height:40px">
+			    
+		<%--
+		<footer class="footer">
 		  <div class="container text-center">
 		  	<span><a href="#menu-toggle" id="menu-toggle">展开/收缩侧边菜单栏</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 		     &copy; 2013-2014 AppleHead Software Inc. All Rights Reserved.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a data-toggle="modal" data-target="#about" href="#">关于CYYJG</a>		    
 		  </div>
 		</footer>
-	      	      
+	    --%>
+	      	       
 	    <!-- About Modal -->
 		<div class="modal fade" id="about" tabindex="-1" role="dialog"
 			aria-labelledby="myModalLabel" aria-hidden="true">
