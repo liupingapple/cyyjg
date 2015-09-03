@@ -67,11 +67,26 @@ class SaleOrderController {
 	
 	def insert_saleOrderLine() {
 		Prod p = Prod.get(params['prod.id'])
+		
+		params.priceFlag = "C"
 		if (params.price == 'A-上次订单价格') {
 			def lastOrderLine = SaleOrderLine.findByProd(p, [sort:'id', order:'desc'])
 			params.price = lastOrderLine?.price
+			params.priceFlag = "A"
 		} else { // if (params.price == 'B-产品标准价格') 
-			params.price = ""+p?.prodBase?.stdPrice
+			params.price = p?.prodBase?.stdPrice
+			params.priceFlag = "B"
+		}
+		
+		if (!params.price) {
+			params.price = p?.prodBase?.stdPrice
+			flash.message = "没有取到上次订单的价格，给您选用该产品标准价格"
+			params.priceFlag = "B"
+		}
+		
+		if (!params.price) {
+			params.price = p?.prodBase?.stdPrice
+			flash.message = "没有取到上次订单的价格以及产品标准价格，请核实产品标准价格是否已经定义"
 		}
 				
 		def saleOrderLineObj = new SaleOrderLine(params)
@@ -82,7 +97,7 @@ class SaleOrderController {
 			return
 		}
 				
-		flash.message = message(code: 'default.created.message', args: [message(code: 'saleOrderLine.label', default: 'SaleOrderLine'), saleOrderLineObj.id])
+		flash.message = flash.message+", "+message(code: 'default.created.message', args: [message(code: 'saleOrderLine.label', default: 'SaleOrderLine'), saleOrderLineObj.id])
 		redirect(action: "show", id: params['saleOrder.id'])
 	}
 	

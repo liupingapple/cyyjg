@@ -23,7 +23,7 @@
 		<g:message code="endUser.password.label" default="Password" />
 		
 	</label>
-	<g:textField name="password" value="${endUserObj?.password}"/>
+	<g:textField name="password" value=""/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: endUserObj, field: 'position', 'error')} ">

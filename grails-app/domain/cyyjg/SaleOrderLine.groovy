@@ -10,6 +10,7 @@ class SaleOrderLine {
 	String unit = '克'
 	
 	BigDecimal price
+	String priceFlag = "C"
 	
 	Date deliveryDate
 	
@@ -27,6 +28,7 @@ class SaleOrderLine {
 		quantity nullable:false
 		unit inList:cyyjg.CONSTANT.UNITs
 		price nullable:false
+		priceFlag nullable:true, inList:["A","B", "C"] //A-上次订单价格, B-产品标准价格, C-自定义
 		prodBatch nullable:true
 		
 		deliveryDate nullable:true

@@ -114,7 +114,16 @@
 								</div>
 							</div>
 						</div>
-						<div class="panel-footer text-center"><g:link class="btn btn-warning btn-sm" action="edit" id="${prodObj.id }">更新</g:link></div>
+						<div class="panel-footer text-center">
+							<g:link class="btn btn-warning btn" action="edit" id="${prodObj.id }">更新客户参考编码或备注</g:link>
+							<g:if test="${prodObj?.rootBomStdId}">
+								<g:link class="btn btn-success btn" controller="bomStd" action="edit" id="${prodObj.rootBomStdId }">标准BOM</g:link>
+							</g:if>
+							<g:else>
+								<g:link class="btn btn-success btn" controller="bomStd" action="create" params="${['prod.id':prodObj.id, 'cust.id':prodObj?.cust?.id] }">创建标准BOM</g:link>
+							</g:else>
+							<g:link class="btn btn-danger btn" controller="prodBase" action="edit" id="${prodObj.prodBase.id }" onclick="return confirm('修改产品定义可能会影响所有用到该产品的客户和订单');">更新产品定义</g:link>
+						</div>
 						</div>
 						</div>
 					</div>

@@ -38,9 +38,9 @@ session.fromId = saleOrderObj?.id
 	</td>
     <td><g:link controller="prod" action="show" id="${orderLine?.prod.id}"> ${orderLine?.prod}</g:link></td>
     <td><g:textField class="qblank" name="quantity" size="3" value="${fieldValue(bean: orderLine, field: 'quantity')}" required=""/></td>
-    <td><g:select name="unit" from="${orderLine.constraints.unit.inList}" value="${orderLine?.unit}" valueMessagePrefix="saleOrderLine.unit" noSelection="['': '']"/></td>        
-    <td><g:textField class="qblank"  name="price" size="3" value="${orderLine?.price}"/></td>
-    <td><g:datePicker name="deliveryDate" precision="day"  value="${orderLine?.deliveryDate}" default="none" noSelection="['': '']" relativeYears="${-3..3 }"/></td>
+    <td><g:select name="unit" from="${orderLine.constraints.unit.inList}" value="${orderLine?.unit}" valueMessagePrefix="saleOrderLine.unit"/></td>        
+    <td><g:textField class="qblank"  name="price" size="3" value="${orderLine?.price}"/>&nbsp;&nbsp;/${orderLine?.priceFlag}/</td>
+    <td><g:datePicker name="deliveryDate" precision="day"  value="${orderLine?.deliveryDate}" default="none" relativeYears="${-3..3 }"/></td>
     <td><g:textField class="qblank"  name="comment" size="50" value="${orderLine?.comment}"/></td>
   </tr>
   </g:form>
@@ -51,24 +51,24 @@ session.fromId = saleOrderObj?.id
   <tr>
     <td>
     	<g:actionSubmit class="btn btn-info btn-xs" action="insert_saleOrderLine" value="增加"/>
-    </td>
-    <td>    
-        <g:textField class="qblank" name="prodSearch" value="" size="8" onchange="${remoteFunction(action:'prodSearch', id:saleOrderObj?.cust?.id, update:'prodInput', params:'\'nameFilter=\' + this.value' )}"/>        
-        <a href="#" onClick="showProdSearch()"><span class="glyphicon glyphicon-search"></span></a>
+    	<a href="#" onClick="showProdSearch()"><span class="glyphicon glyphicon-search"></span></a>
     	<script type="text/javascript">
 	        function showProdSearch() {
-		        //$("#prodSearch").toggle();
+		        $("#prodSearch").toggle();
 			}
         </script>
+    </td>
+    <td>    
+        <g:textField class="qblank" style="display:none" name="prodSearch" value="" size="8" onchange="${remoteFunction(action:'prodSearch', id:saleOrderObj?.cust?.id, update:'prodInput', params:'\'nameFilter=\' + this.value' )}"/>        
         
     	<%--<g:select id="prod" name="prod.id" from="${cyyjg.Prod.findAllByCust(saleOrderObj.cust)}" optionKey="id" required="" value=""/> --%>
     	<g:render template="prodInput_template"/>
     </td>
     <td><g:textField class="qblank"  name="quantity" size="3" value="" required=""/></td>
-    <td><g:select name="unit" from="${cyyjg.CONSTANT.UNITs}" value="" valueMessagePrefix="saleOrderLine.unit" noSelection="['': '']"/></td>
+    <td><g:select name="unit" from="${cyyjg.CONSTANT.UNITs}" value="" valueMessagePrefix="saleOrderLine.unit" /></td>
     <td><g:select name="price" from="${['A-上次订单价格','B-产品标准价格']}"/></td>
-    <td><g:datePicker name="deliveryDate" precision="day"  value="${new Date()}" default="none" noSelection="['': '']" relativeYears="${-3..3 }"/></td>
-    <td><g:textField class="qblank" name="comment" size="50" value="test"/></td>
+    <td><g:datePicker name="deliveryDate" precision="day"  value="${new Date()}" default="none" relativeYears="${-3..3 }"/></td>
+    <td><g:textField class="qblank" name="comment" size="50" value=""/></td>
   </tr>
   </g:form>
 </table>

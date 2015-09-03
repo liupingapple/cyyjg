@@ -117,6 +117,12 @@ class EndUserController {
             redirect(action: "list")
             return
         }
+		
+		if (endUserObj != session.user) {
+			flash.message = "您不能修改别的用户的信息"
+			redirect(action: "list")
+			return
+		}
 
         if (version != null) {
             if (endUserObj.version > version) {
@@ -132,13 +138,16 @@ class EndUserController {
 			params.password = params.password.encodeAsSHA()
 		}
 
+		if (!params.password) {
+			params.remove("password")
+		}
         endUserObj.properties = params
 		
         if (!endUserObj.save(flush: true)) {
             render(view: "edit", model: [endUserObj: endUserObj])
             return
         }
-
+				
         flash.message = message(code: 'default.updated.message', args: [message(code: 'endUser.label', default: 'EndUser'), endUserObj.id])
         redirect(action: "show", id: endUserObj.id)
     }

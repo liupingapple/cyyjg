@@ -27,4 +27,9 @@ class Utils {
 	{
 		getRootBom(bom)?.prod
 	}
+	
+	static String generateProdCustRefCode(Customer cust, ProdBase prodBase)
+	{
+		cust.code+"-"+prodBase.code
+	}
 }

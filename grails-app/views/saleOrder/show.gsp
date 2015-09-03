@@ -76,8 +76,8 @@
 							<td colspan="8" class="text-center">
 							<g:form>
 									<g:hiddenField name="id" value="${saleOrderObj?.id}" />
-									<g:link class="btn btn-primary" action="edit" id="${saleOrderObj?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-									<g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+									<g:link class="btn btn-primary btn-sm" action="edit" id="${saleOrderObj?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
+									<g:actionSubmit class="btn btn-danger btn-sm" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
 							</g:form>
 							</td>
 						</tr>

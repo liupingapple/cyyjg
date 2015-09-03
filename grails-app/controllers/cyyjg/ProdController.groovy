@@ -32,14 +32,13 @@ class ProdController {
     }
 
     def save() {
-		println "params: ${params}"
 		Customer cust = Customer.load(params['cust.id'])
 		ProdBase prodBase = ProdBase.load(params['prodBase.id'])
-		
-		if (params.custRefCode?.contains("由系统生成")) {
-			params.custRefCode = cust.code+"-"+prodBase.code
+				
+		params.code = Utils.generateProdCustRefCode(cust, prodBase)
+		if (!params.custRefCode || params.custRefCode.contains("由系统生成")) {
+			params.custRefCode = params.code
 		}
-		params.code = params.custRefCode
 		
         def prodObj = new Prod(params)
         if (!prodObj.save(flush: true)) {
@@ -90,7 +89,12 @@ class ProdController {
                 return
             }
         }
-
+		
+		params.code = Utils.generateProdCustRefCode(prodObj.cust, prodObj.prodBase)
+		if (!params.custRefCode || params.custRefCode.contains("由系统生成")) {
+			params.custRefCode = params.code
+		}
+		
         prodObj.properties = params
 
         if (!prodObj.save(flush: true)) {
