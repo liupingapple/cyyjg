@@ -32,12 +32,12 @@ class BootStrap {
 		new ProdGroup(name:"硅胶").save()
 		new ProdGroup(name:"色母").save()
 				
-		def pbase1 = new ProdBase(code:"305C", name:"色母C").save(failOnError:true)
-		def pbase2 = new ProdBase(code:"C001", name:"红色半成品", type:'半成品').save(failOnError:true)
-		def pbase3 = new ProdBase(code:"CY924", name:"白色半成品", type:'半成品').save(failOnError:true)
-		def pbase4 = new ProdBase(code:"R-001", name:"色粉", type:'原材料').save(failOnError:true)
-		def pbase5 = new ProdBase(code:"E50", name:"硅胶E50", type:'原材料').save(failOnError:true)
-		def pbase6 = new ProdBase(code:"W-001", name:"色粉W", type:'原材料').save(failOnError:true)
+		def pbase1 = new ProdBase(code:"305C", name:"色母C", stdPrice:5).save(failOnError:true)
+		def pbase2 = new ProdBase(code:"C001", name:"红色半成品", type:'半成品', stdPrice:2).save(failOnError:true)
+		def pbase3 = new ProdBase(code:"CY924", name:"白色半成品", type:'半成品', stdPrice:4).save(failOnError:true)
+		def pbase4 = new ProdBase(code:"R-001", name:"色粉", type:'原材料', stdPrice:7).save(failOnError:true)
+		def pbase5 = new ProdBase(code:"E50", name:"硅胶E50", type:'原材料', stdPrice:8).save(failOnError:true)
+		def pbase6 = new ProdBase(code:"W-001", name:"色粉W", type:'原材料', stdPrice:3).save(failOnError:true)
 		
 		Prod p0 = new Prod(code:'PT－305C', custRefCode:'PT－305C', cust:cust, prodBase:pbase1).save(failOnError:true)
 		BomStd bomP0 = new BomStd(prod:p0, mark:'S', quantity:1, comment:"This is a example of EngBOM for ${p0}").save(failOnError:true)
@@ -90,8 +90,8 @@ class BootStrap {
 	void initCustomer()
 	{
 		println "init initCustomer ..."
-		new Customer(code:"cust-1", name:"测试客户-1", abrrName:"客户-1").save(failOnError:true)
-		new Customer(code:"cust-2", name:"测试客户-2", abrrName:"客户-2").save(failOnError:true)
+		new Customer(code:"Cust1", name:"测试客户1", abrrName:"客户1").save(failOnError:true)
+		new Customer(code:"Cust2", name:"测试客户2", abrrName:"客户2").save(failOnError:true)
 	}
 	
 	void initOthers()

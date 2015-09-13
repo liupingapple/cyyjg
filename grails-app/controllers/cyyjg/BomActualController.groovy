@@ -91,11 +91,14 @@ class BomActualController {
         }
 
         flash.message = message(code: 'default.updated.message', args: [message(code: 'bomActual.label', default: 'BomActual'), bomActualObj.id])
-        redirect(action: "show", id: bomActualObj.id)
+        redirect(action: "edit", id: bomActualObj.id)
     }
 
     def delete(Long id) {
         def bomActualObj = BomActual.get(id)
+		
+		def rootBom = Utils.getRootBom(bomActualObj)
+		
         if (!bomActualObj) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'bomActual.label', default: 'BomActual'), id])
             redirect(action: "list")
@@ -105,11 +108,22 @@ class BomActualController {
         try {
             bomActualObj.delete(flush: true)
             flash.message = message(code: 'default.deleted.message', args: [message(code: 'bomActual.label', default: 'BomActual'), id])
-            redirect(action: "list")
+            redirect(action: "edit", id:rootBom.id)
         }
         catch (DataIntegrityViolationException e) {
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'bomActual.label', default: 'BomActual'), id])
-            redirect(action: "show", id: id)
+            redirect(action: "edit", id: id)
         }
     }
+	
+	def confirmProdInst(Long id)
+	{
+		def bomActualObj = BomActual.get(id)
+		ProdInstruct prodInst = bomActualObj?.prodInstruct
+		println "prodInst is: ${prodInst}"
+		bomActualObj?.prodInstruct?.status = CONSTANT.INSTRUCT_STATUS_CONFIRMED
+		bomActualObj?.prodInstruct?.save(failOnError:true)
+						
+		redirect(action: "edit", id: id)
+	}
 }

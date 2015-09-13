@@ -39,15 +39,7 @@ abstract class Bom implements java.lang.Comparable {
 	static mapping = {
 		tablePerHierarchy true
 	}
-	
-	def afterInsert = {
-		if (Utils.isRootBom(this)) {
-			Prod prod = Prod.get(this.prod.id)
-			prod.rootBomStdId = this.id
-			// prod.save()
-		}		
-	}
-		
+			
     static constraints = {		
 		prod ()
 		mark(nullable:false, maxSize:9)

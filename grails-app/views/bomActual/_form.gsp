@@ -1,92 +1,150 @@
+<%@page import="cyyjg.CONSTANT"%>
+<%@page import="cyyjg.Utils"%>
 <%@ page import="cyyjg.BomActual" %>
 
+<!--主要样式-->
+<link rel="stylesheet" href="${resource(dir: 'css', file: 'bom_tree_style.css')}" type="text/css"/>	
 
+<script type="text/javascript">
+$(function(){
+    $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', '折叠');
+    $('.tree li.parent_li > span').on('click', function (e) {
+        // only click the label will trigger the event
+        if ($(this).children('label').length > 0) {
+        	var children = $(this).parent('li.parent_li').find(' > ul > li');
+            if (children.is(":visible")) {
+                children.hide('fast');
+                $(this).attr('title', '展开').find(' > i').addClass('glyphicon glyphicon-plus').removeClass('glyphicon glyphicon-minus');
+            } else {
+                children.show('fast');
+                $(this).attr('title', '折叠').find(' > i').addClass('glyphicon glyphicon-minus').removeClass('glyphicon glyphicon-plus');
+            }
+            e.stopPropagation();
+        }
+        
+    });
 
-<div class="fieldcontain ${hasErrors(bean: bomActualObj, field: 'prod', 'error')} required">
-	<label for="prod">
-		<g:message code="bomActual.prod.label" default="Prod" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:select id="prod" name="prod.id" from="${cyyjg.Prod.list()}" optionKey="id" required="" value="${bomActualObj?.prod?.id}" class="many-to-one"/>
-</div>
+    
+});
+</script>
 
-<div class="fieldcontain ${hasErrors(bean: bomActualObj, field: 'level', 'error')} required">
-	<label for="level">
-		<g:message code="bomActual.level.label" default="Level" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:field name="level" type="number" value="${bomActualObj.level}" required=""/>
-</div>
+<g:set var="rootBom" value="${Utils.getRootBom(bomActualObj) }"></g:set>
+<g:set var="prodInstruct" value="${bomActualObj?.prodInstruct }"></g:set>
 
-<div class="fieldcontain ${hasErrors(bean: bomActualObj, field: 'seq', 'error')} required">
-	<label for="seq">
-		<g:message code="bomActual.seq.label" default="Seq" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:field name="seq" type="number" value="${bomActualObj.seq}" required=""/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bomActualObj, field: 'unit', 'error')} ">
-	<label for="unit">
-		<g:message code="bomActual.unit.label" default="Unit" />
+<div class="panel panel-default">
+	<div class="panel-heading">
+		生产单:
+		${prodInstruct?.code }
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-4">
+				<dl class="dl-horizontal">
+					<dt>订单</dt>
+					<dd><g:link controller="saleOrder" action="show" id="${prodInstruct?.saleOrderLine?.saleOrder?.id }">${prodInstruct?.saleOrderLine?.saleOrder?.code }</g:link></dd>
+				</dl>
+			</div>
+			<div class="col-md-4">
+				<dl class="dl-horizontal">
+					<dt>产品</dt>
+					<dd>${prodInstruct?.saleOrderLine?.prod }</dd>
+				</dl>
+			</div>
+			<div class="col-md-3">
+				<dl class="dl-horizontal">
+					<dt>状态</dt>
+					<dd>${prodInstruct?.status }</dd>
+				</dl>
+			</div>
+		</div>
 		
-	</label>
-	<g:select name="unit" from="${bomActualObj.constraints.unit.inList}" value="${bomActualObj?.unit}" valueMessagePrefix="bomActual.unit" noSelection="['': '']"/>
+		<g:if test="${prodInstruct?.status == CONSTANT.INSTRUCT_STATUS_DRAFT }">
+			<p class="text-center">
+			<g:link action="confirmProdInst" id="${bomActualObj?.id }" class="btn btn-success btn-sm">确定生产单</g:link>
+		</g:if>
+	</div>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: bomActualObj, field: 'parent', 'error')} ">
-	<label for="parent">
-		<g:message code="bomActual.parent.label" default="Parent" />
+<div class="tree">
+<ul>
+	<li>
+		<span>
+			<i class="glyphicon glyphicon-minus"></i><label>${rootBom? rootBom:'新...' }</label>	
+		</span>
+		<span>	
+			<g:form>
+				<g:render template="fields" model="[bom:rootBom]"></g:render> 
+				<g:if test="${prodInstruct?.status == CONSTANT.INSTRUCT_STATUS_DRAFT }">		
+				<g:actionSubmit class="btn btn-primary btn-xs" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+				<g:actionSubmit class="btn btn-danger btn-xs" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" formnovalidate="" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+				</g:if>
+			</g:form>
+		</span>
 		
-	</label>
-	<g:select id="parent" name="parent.id" from="${cyyjg.Bom.list()}" optionKey="id" value="${bomActualObj?.parent?.id}" class="many-to-one" noSelection="['null': '']"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bomActualObj, field: 'children', 'error')} ">
-	<label for="children">
-		<g:message code="bomActual.children.label" default="Children" />
+		<ul>
+		<g:each in="${rootBom?.children }" var="child" status="i">
+				<li>
+					<span><i class="glyphicon glyphicon-minus"></i><label>${child }</label>	
+						<g:if test="${bomActualObj==child }"><span class="glyphicon glyphicon-hand-left" aria-hidden="true"></span>&nbsp;</g:if>
+					</span>		
+					<span>
+						<g:form>					
+							<g:render template="fields" model="[bom:child, parentBomId:rootBom?.id]"></g:render>
+							<g:if test="${prodInstruct?.status == CONSTANT.INSTRUCT_STATUS_DRAFT }">
+							<g:actionSubmit class="btn btn-primary btn-xs" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+							<g:actionSubmit class="btn btn-danger btn-xs" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" formnovalidate="" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+							</g:if>	
+						</g:form>
+					</span>
+					<ul>
+						<g:each in="${child?.children }" var="grandChild" status="ii">
+							<li>
+								<span>
+									<i class="icon-leaf"></i><label>${grandChild }</label>
+									<g:if test="${bomActualObj==grandChild }"><span class="glyphicon glyphicon-hand-left" aria-hidden="true"></span>&nbsp;</g:if>
+								</span>
+								<span>
+									<g:form>
+										<g:render template="fields" model="[bom:grandChild, parentBomId:child?.id]"></g:render>
+										<g:if test="${prodInstruct?.status == CONSTANT.INSTRUCT_STATUS_DRAFT }">
+										<g:actionSubmit class="btn btn-primary btn-xs" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+										<g:actionSubmit class="btn btn-danger btn-xs" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" formnovalidate="" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+										</g:if>
+									</g:form>								
+								</span>
+							</li>
+						</g:each>
+							
+						<g:if test="${prodInstruct?.status == CONSTANT.INSTRUCT_STATUS_DRAFT }">
+						<li>
+							<span>
+								<i class="glyphicon glyphicon-minus"></i>新...
+							</span>
+							<span>
+								<g:form>
+								<g:render template="fields" model="[bom:grandChild, parentBomId:child?.id]"></g:render>
+								<g:actionSubmit class="btn btn-warning btn-xs" action="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
+								</g:form>
+							</span>
+						</li>
+						</g:if>
+					</ul>
+				</li>
+		</g:each>
+		<g:if test="${prodInstruct?.status == CONSTANT.INSTRUCT_STATUS_DRAFT }">
+		<li>
+			<span>
+				<i class="glyphicon glyphicon-minus"></i>新...
+			</span>
+			<span>
+				<g:form>
+				<g:render template="fields" model="[bom:child, parentBomId:rootBom?.id]"></g:render>
+				<g:actionSubmit class="btn btn-warning btn-xs" action="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
+				</g:form>
+			</span>
+		</li>
+		</g:if>
+		</ul>
 		
-	</label>
-	
+</ul>
 </div>
-
-<div class="fieldcontain ${hasErrors(bean: bomActualObj, field: 'comment', 'error')} ">
-	<label for="comment">
-		<g:message code="bomActual.comment.label" default="Comment" />
-		
-	</label>
-	<g:textArea name="comment" cols="40" rows="5" maxlength="1000" value="${bomActualObj?.comment}"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bomActualObj, field: 'prodInstruct', 'error')} required">
-	<label for="prodInstruct">
-		<g:message code="bomActual.prodInstruct.label" default="Prod Instruct" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:select id="prodInstruct" name="prodInstruct.id" from="${cyyjg.ProdInstruct.list()}" optionKey="id" required="" value="${bomActualObj?.prodInstruct?.id}" class="many-to-one"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bomActualObj, field: 'modifiedBy', 'error')} required">
-	<label for="modifiedBy">
-		<g:message code="bomActual.modifiedBy.label" default="Modified By" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:select id="modifiedBy" name="modifiedBy.id" from="${cyyjg.EndUser.list()}" optionKey="id" required="" value="${bomActualObj?.modifiedBy?.id}" class="many-to-one"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bomActualObj, field: 'status', 'error')} ">
-	<label for="status">
-		<g:message code="bomActual.status.label" default="Status" />
-		
-	</label>
-	<g:select name="status" from="${bomActualObj.constraints.status.inList}" value="${bomActualObj?.status}" valueMessagePrefix="bomActual.status" noSelection="['': '']"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bomActualObj, field: 'quantity', 'error')} required">
-	<label for="quantity">
-		<g:message code="bomActual.quantity.label" default="Quantity" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:field name="quantity" value="${fieldValue(bean: bomActualObj, field: 'quantity')}" required=""/>
-</div>
-

@@ -12,7 +12,7 @@ class SaleOrderController {
     }
 
     def list(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+        params.max = Math.min(max ?: 10, 100)				
         [saleOrderObjList: SaleOrder.list(params), saleOrderObjTotal: SaleOrder.count()]
     }
 
@@ -20,6 +20,70 @@ class SaleOrderController {
 		params.code = "正在创建中..."
         [saleOrderObj: new SaleOrder(params)]
     }
+	
+	def confirm(Long id) {
+		def saleOrderObj = SaleOrder.get(id)
+				
+		saleOrderObj.orderLines.each { orderLine->
+			println "orderLine.prod is: ${orderLine.prod}"
+			println "orderLine.prod.rootBomStdId is: ${orderLine.prod.rootBomStdId}"
+			def rootBomStd = BomStd.get(orderLine.prod.rootBomStdId)
+			println "rootBomStd=${rootBomStd}"
+						
+			def cri = ProdInstruct.createCriteria()
+			def result = cri.list(max:1, sort:"id", order:"desc") {				
+				ne ("status", CONSTANT.INSTRUCT_STATUS_DRAFT)
+				saleOrderLine {
+					eq ("prod", orderLine.prod)
+				}
+			}
+						
+			def lastOne = null
+			if (result.size() > 0) {
+				lastOne = result.get(0)
+			}
+			
+			ProdInstruct pinst = new ProdInstruct(code:"P-"+saleOrderObj.code+"-"+orderLine.id, saleOrderLine:orderLine, lastOne:lastOne).save(flush: true)
+				
+			if (!pinst) {
+				render(view: "show", model: [pinst: pinst])
+				return
+			}
+			
+			def rootBomActual = new BomActual(prod:orderLine.prod, mark:"P", quantity:rootBomStd?.quantity, prodInstruct:pinst, refBomStdId:rootBomStd?.id,
+				modifiedBy:session.user, unit:rootBomStd?.unit).save(flush:true, failOnError:true)
+			// new BomActual.save() will trigger prodInstruct.rootBomActual assigning value in afterInsert()
+				
+			if (!rootBomActual) {
+				render(view: "show", model: [rootBomActual:rootBomActual])
+				pinst.delete()
+				return
+			}
+				
+			rootBomStd.children.each { child->
+				def p_child = new BomActual(prod:child.prod, mark:child.mark.replaceFirst("S","P"), quantity:child?.quantity, prodInstruct:pinst,
+				refBomStdId:child?.id, modifiedBy:session.user, unit:child?.unit).save(flush:true, failOnError:true)
+				
+				rootBomActual.addToChildren(p_child)
+				rootBomActual.save(flush:true, failOnError:true)
+								
+				child.children.each { grandChild ->
+					def p_grandChild = new BomActual(prod:grandChild.prod, mark:grandChild.mark.replaceFirst("S","P"), 
+						quantity:grandChild?.quantity, prodInstruct:pinst, refBomStdId:grandChild?.id, modifiedBy:session.user,
+						unit:grandChild?.unit).save(flush:true, failOnError:true)
+						
+					p_child.addToChildren(p_grandChild)
+					p_child.save(flush:true, failOnError:true)
+				}
+			}
+			
+			pinst.save(flush:true, failOnError:true)
+		}
+		
+		saleOrderObj.status = CONSTANT.ORDER_STATUS_CONFIRMED
+		
+		redirect(action: "show", id: saleOrderObj.id)
+	}
 	
 	def prodSearch(Long id)
 	{
@@ -80,13 +144,17 @@ class SaleOrderController {
 		
 		if (!params.price) {
 			params.price = p?.prodBase?.stdPrice
-			flash.message = "没有取到上次订单的价格，给您选用该产品标准价格"
+			flash.message = "没有取到上次订单的价格，给您选用该产品标准价格"+", "
 			params.priceFlag = "B"
+		} else {
+			flash.message = ""
 		}
 		
 		if (!params.price) {
 			params.price = p?.prodBase?.stdPrice
-			flash.message = "没有取到上次订单的价格以及产品标准价格，请核实产品标准价格是否已经定义"
+			flash.message = "没有取到上次订单的价格以及产品标准价格，请核实产品标准价格是否已经定义"+", "
+		} else {
+			flash.message = ""
 		}
 				
 		def saleOrderLineObj = new SaleOrderLine(params)
@@ -97,7 +165,7 @@ class SaleOrderController {
 			return
 		}
 				
-		flash.message = flash.message+", "+message(code: 'default.created.message', args: [message(code: 'saleOrderLine.label', default: 'SaleOrderLine'), saleOrderLineObj.id])
+		flash.message = flash.message + message(code: 'default.created.message', args: [message(code: 'saleOrderLine.label', default: 'SaleOrderLine'), saleOrderLineObj.id])
 		redirect(action: "show", id: params['saleOrder.id'])
 	}
 	

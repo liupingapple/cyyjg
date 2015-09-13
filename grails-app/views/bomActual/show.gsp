@@ -32,20 +32,20 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${bomActualObj?.level}">
+				<g:if test="${bomActualObj?.mark}">
 				<li class="fieldcontain">
-					<span id="level-label" class="property-label"><g:message code="bomActual.level.label" default="Level" /></span>
+					<span id="mark-label" class="property-label"><g:message code="bomActual.mark.label" default="Mark" /></span>
 					
-						<span class="property-value" aria-labelledby="level-label"><g:fieldValue bean="${bomActualObj}" field="level"/></span>
+						<span class="property-value" aria-labelledby="mark-label"><g:fieldValue bean="${bomActualObj}" field="mark"/></span>
 					
 				</li>
 				</g:if>
 			
-				<g:if test="${bomActualObj?.seq}">
+				<g:if test="${bomActualObj?.quantity}">
 				<li class="fieldcontain">
-					<span id="seq-label" class="property-label"><g:message code="bomActual.seq.label" default="Seq" /></span>
+					<span id="quantity-label" class="property-label"><g:message code="bomActual.quantity.label" default="Quantity" /></span>
 					
-						<span class="property-value" aria-labelledby="seq-label"><g:fieldValue bean="${bomActualObj}" field="seq"/></span>
+						<span class="property-value" aria-labelledby="quantity-label"><g:fieldValue bean="${bomActualObj}" field="quantity"/></span>
 					
 				</li>
 				</g:if>
@@ -97,6 +97,15 @@
 				</li>
 				</g:if>
 			
+				<g:if test="${bomActualObj?.refBomStdId}">
+				<li class="fieldcontain">
+					<span id="refBomStdId-label" class="property-label"><g:message code="bomActual.refBomStdId.label" default="Ref Bom Std Id" /></span>
+					
+						<span class="property-value" aria-labelledby="refBomStdId-label"><g:fieldValue bean="${bomActualObj}" field="refBomStdId"/></span>
+					
+				</li>
+				</g:if>
+			
 				<g:if test="${bomActualObj?.modifiedBy}">
 				<li class="fieldcontain">
 					<span id="modifiedBy-label" class="property-label"><g:message code="bomActual.modifiedBy.label" default="Modified By" /></span>
@@ -129,15 +138,6 @@
 					<span id="lastUpdated-label" class="property-label"><g:message code="bomActual.lastUpdated.label" default="Last Updated" /></span>
 					
 						<span class="property-value" aria-labelledby="lastUpdated-label"><g:formatDate date="${bomActualObj?.lastUpdated}" /></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${bomActualObj?.quantity}">
-				<li class="fieldcontain">
-					<span id="quantity-label" class="property-label"><g:message code="bomActual.quantity.label" default="Quantity" /></span>
-					
-						<span class="property-value" aria-labelledby="quantity-label"><g:fieldValue bean="${bomActualObj}" field="quantity"/></span>
 					
 				</li>
 				</g:if>

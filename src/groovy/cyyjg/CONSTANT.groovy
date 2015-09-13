@@ -13,9 +13,20 @@ class CONSTANT {
 		,'生产单-新建', '生产单-查询', '生产单-修改','生产单-删除', '生产单-确认','生产单-取消'
 		,'送货单-新建', '送货单-查询', '送货单-修改','送货单-删除', '送货单-确认','送货单-取消', '送货单-打印']
 	
-	// '新建(可删除)', '确认(可修改地址等不可删除)', '已备料(生产BOM确认，已下领料单)', '生产中', '完成可送货'
+	// '新建(可删除)', '确认(可下生产单，可修改地址等不可删除)', '已备料(生产BOM确认，已下领料单)', '生产中', '完成可送货'
 	// The default value in domain SaleOrder.groovy is ORDER_STATUSes[0]='新建'
-	final static ORDER_STATUSes = ['新建', '确认', '已备料', '生产中', '完成可送货']
+	final static String ORDER_STATUS_NEW = '新建'
+	final static String ORDER_STATUS_CONFIRMED = '已确认'  // 审核通过
+	final static String ORDER_STATUS_FINISHED = '已完成'	
+	final static String ORDER_STATUS_CLOSED = '已关闭'
+	final static String ORDER_STATUS_CANCELED = '已取消'
+	final static ORDER_STATUSes = [ORDER_STATUS_NEW, ORDER_STATUS_CONFIRMED, ORDER_STATUS_FINISHED, ORDER_STATUS_CLOSED, ORDER_STATUS_CANCELED]
+	
+	final static String INSTRUCT_STATUS_DRAFT = '草稿'
+	final static String INSTRUCT_STATUS_CONFIRMED = '已确定'
+	final static String INSTRUCT_STATUS_PRODUCED = '已生产'
+	final static String INSTRUCT_STATUS_DELIVERED = '已发货'
+	final static INSTRUCT_STATUSes = [INSTRUCT_STATUS_DRAFT, INSTRUCT_STATUS_CONFIRMED, INSTRUCT_STATUS_PRODUCED, INSTRUCT_STATUS_DELIVERED]
 	
 	final static UNITs = ['克', '千克']
 	

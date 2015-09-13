@@ -26,9 +26,9 @@
 					
 						<th><g:message code="bomActual.prod.label" default="Prod" /></th>
 					
-						<g:sortableColumn property="level" title="${message(code: 'bomActual.level.label', default: 'Level')}" />
+						<g:sortableColumn property="mark" title="${message(code: 'bomActual.mark.label', default: 'Mark')}" />
 					
-						<g:sortableColumn property="seq" title="${message(code: 'bomActual.seq.label', default: 'Seq')}" />
+						<g:sortableColumn property="quantity" title="${message(code: 'bomActual.quantity.label', default: 'Quantity')}" />
 					
 						<g:sortableColumn property="unit" title="${message(code: 'bomActual.unit.label', default: 'Unit')}" />
 					
@@ -44,9 +44,9 @@
 					
 						<td><g:link action="show" id="${bomActualObj.id}">${fieldValue(bean: bomActualObj, field: "prod")}</g:link></td>
 					
-						<td>${fieldValue(bean: bomActualObj, field: "level")}</td>
+						<td>${fieldValue(bean: bomActualObj, field: "mark")}</td>
 					
-						<td>${fieldValue(bean: bomActualObj, field: "seq")}</td>
+						<td>${fieldValue(bean: bomActualObj, field: "quantity")}</td>
 					
 						<td>${fieldValue(bean: bomActualObj, field: "unit")}</td>
 					

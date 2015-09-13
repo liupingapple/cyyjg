@@ -17,7 +17,7 @@ class Prod {
 	String custRefCode // 客户参考编号
 		
 	// BomStd bomStd // don't link the associate with BomStd, we just use its id, so the reference will maintained by user
-	long rootBomStdId
+	long rootBomStdId  // domain Bom 中有Prod字段，而domain Prod中如果再含有Bom字段，对值的影响
 			
 	Date dateCreated
 	Date lastUpdated

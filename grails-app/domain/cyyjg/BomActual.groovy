@@ -8,12 +8,15 @@ class BomActual extends Bom {
 		
 	static belongsTo = [prodInstruct:ProdInstruct]
 	
-	BomStd refBomStd
+	long refBomStdId
+	
+	// transients
 	SaleOrderLine saleOrderLine
-	static transients = ['refBomStd', 'saleOrderLine']
+	static transients = ['saleOrderLine']
 		
     static constraints = {
 		prodInstruct()
+		refBomStdId(nullable:true)
 		modifiedBy (nullable:false)
 		status (inList:['草稿', '确认', '审批通过']) 
     }
@@ -23,8 +26,11 @@ class BomActual extends Bom {
 		prodInstruct.saleOrderLine
 	}
 	
-	BomStd getRefBomStd()
-	{
-		BomStd.get(saleOrderLine.prod.rootBomStdId)
+	def afterInsert = {
+		if (Utils.isRootBom(this)) {
+			ProdInstruct prodInstruct = ProdInstruct.get(this.prodInstruct.id)
+			prodInstruct.rootBomActual = this
+			// prod.save()
+		}
 	}
 }

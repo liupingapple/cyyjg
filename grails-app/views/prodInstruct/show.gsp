@@ -13,7 +13,6 @@
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
 				<li><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
 			</ul>
 		</div>
 		<div id="show-prodInstruct" class="content scaffold-show" role="main">
@@ -34,18 +33,18 @@
 			
 				<g:if test="${prodInstructObj?.saleOrderLine}">
 				<li class="fieldcontain">
-					<span id="saleOrderLine-label" class="property-label"><g:message code="prodInstruct.saleOrderLine.label" default="Sale Order Line" /></span>
-					
-						<span class="property-value" aria-labelledby="saleOrderLine-label"><g:link controller="saleOrderLine" action="show" id="${prodInstructObj?.saleOrderLine?.id}">${prodInstructObj?.saleOrderLine?.encodeAsHTML()}</g:link></span>
-					
+					<span id="saleOrderLine-label" class="property-label"><g:message code="prodInstruct.saleOrderLine.label" default="Sale Order Line" /></span>					
+					<span class="property-value" aria-labelledby="saleOrderLine-label">
+						<g:link controller="saleOrder" action="show" id="${prodInstructObj?.saleOrderLine?.saleOrder?.id}">${prodInstructObj?.saleOrderLine}</g:link>
+					</span>					
 				</li>
 				</g:if>
 			
-				<g:if test="${prodInstructObj?.bomActual}">
+				<g:if test="${prodInstructObj?.rootBomActual}">
 				<li class="fieldcontain">
-					<span id="bomActual-label" class="property-label"><g:message code="prodInstruct.bomActual.label" default="Bom Actual" /></span>
+					<span id="rootBomActual-label" class="property-label"><g:message code="prodInstruct.rootBomActual.label" default="Root Bom Actual" /></span>
 					
-						<span class="property-value" aria-labelledby="bomActual-label"><g:link controller="bomActual" action="show" id="${prodInstructObj?.bomActual?.id}">${prodInstructObj?.bomActual?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="rootBomActual-label"><g:link controller="bomActual" action="edit" id="${prodInstructObj?.rootBomActual?.id}">${prodInstructObj?.rootBomActual?.encodeAsHTML()}</g:link></span>
 					
 				</li>
 				</g:if>
@@ -73,24 +72,6 @@
 					<span id="comment-label" class="property-label"><g:message code="prodInstruct.comment.label" default="Comment" /></span>
 					
 						<span class="property-value" aria-labelledby="comment-label"><g:fieldValue bean="${prodInstructObj}" field="comment"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${prodInstructObj?.lastProduceCode}">
-				<li class="fieldcontain">
-					<span id="lastProduceCode-label" class="property-label"><g:message code="prodInstruct.lastProduceCode.label" default="Last Produce Code" /></span>
-					
-						<span class="property-value" aria-labelledby="lastProduceCode-label"><g:formatDate date="${prodInstructObj?.lastProduceCode}" /></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${prodInstructObj?.lastProduceDate}">
-				<li class="fieldcontain">
-					<span id="lastProduceDate-label" class="property-label"><g:message code="prodInstruct.lastProduceDate.label" default="Last Produce Date" /></span>
-					
-						<span class="property-value" aria-labelledby="lastProduceDate-label"><g:formatDate date="${prodInstructObj?.lastProduceDate}" /></span>
 					
 				</li>
 				</g:if>

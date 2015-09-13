@@ -1,3 +1,4 @@
+<%@page import="cyyjg.CONSTANT"%>
 <%@ page import="cyyjg.SaleOrder" %>
 
 <div class="panel panel-default">
@@ -12,7 +13,12 @@
 		</label>
 	</td>
 	<td>
-		<g:select id="cust" name="cust.id" from="${cyyjg.Customer.list()}" optionKey="id" required="" value="${saleOrderObj?.cust?.id}" class="many-to-one"/>
+		<g:if test="${saleOrderObj?.cust}">
+			${saleOrderObj?.cust }
+		</g:if>
+		<g:else>
+			<g:select id="cust" disabled="${disabled }" name="cust.id" from="${cyyjg.Customer.list()}" optionKey="id" required="" value="${saleOrderObj?.cust?.id}" class="many-to-one"/>
+		</g:else>
 	</td>
 	
 	<!-- column -->
@@ -55,11 +61,13 @@
   	
   	<td colspan="2" class="text-center">
   		<g:if test="${params.action == 'edit' }"> 
-  			<g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
-			<g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" formnovalidate="" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+  			<g:actionSubmit class="btn btn-primary btn-sm" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+  			<g:if test="${saleOrderObj?.status == CONSTANT.ORDER_STATUS_NEW }">
+				<g:actionSubmit class="btn btn-danger btn-sm" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" formnovalidate="" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+			</g:if>
   		</g:if>
   		<g:if test="${params.action == 'create' }">
-  			<g:actionSubmit class="btn btn-primary" action="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
+  			<g:actionSubmit class="btn btn-primary btn-sm" action="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
   		</g:if>
   	</td>	
   </tr>

@@ -7,7 +7,7 @@
 	<g:textField name="custRefCode" value="${prodObj?.custRefCode}" placeholder="不填则由系统生成..." />
 </div>
 
-<g:if test="${prodObj?.cust?.id }"><g:set var="disabled" value="true"></g:set></g:if><g:else><g:set var="disabled" value="false"></g:set></g:else>
+<g:if test="${prodObj?.cust?.id && prodObj?.code}"><g:set var="disabled" value="true"></g:set></g:if><g:else><g:set var="disabled" value="false"></g:set></g:else>
 <div class="fieldcontain ${hasErrors(bean: prodObj, field: 'cust', 'error')} ">
 	<label for="cust">
 		<g:message code="prod.cust.label" default="Cust" />

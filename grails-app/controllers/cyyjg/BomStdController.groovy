@@ -113,7 +113,9 @@ class BomStdController {
 
     def delete(Long id) {
         def bomStdObj = BomStd.get(id)
+				
 		def rootBom = Utils.getRootBom(bomStdObj)
+		
         if (!bomStdObj) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'bomStd.label', default: 'BomStd'), id])
             redirect(action: "list")

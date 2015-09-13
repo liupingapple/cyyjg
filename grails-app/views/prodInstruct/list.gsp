@@ -12,7 +12,6 @@
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
 			</ul>
 		</div>
 		<div id="list-prodInstruct" class="content scaffold-list" role="main">
@@ -28,7 +27,7 @@
 					
 						<th><g:message code="prodInstruct.saleOrderLine.label" default="Sale Order Line" /></th>
 					
-						<th><g:message code="prodInstruct.bomActual.label" default="Bom Actual" /></th>
+						<th><g:message code="prodInstruct.rootBomActual.label" default="Root Bom Actual" /></th>
 					
 						<th><g:message code="prodInstruct.lastOne.label" default="Last One" /></th>
 					
@@ -46,7 +45,7 @@
 					
 						<td>${fieldValue(bean: prodInstructObj, field: "saleOrderLine")}</td>
 					
-						<td>${fieldValue(bean: prodInstructObj, field: "bomActual")}</td>
+						<td>${fieldValue(bean: prodInstructObj, field: "rootBomActual")}</td>
 					
 						<td>${fieldValue(bean: prodInstructObj, field: "lastOne")}</td>
 					

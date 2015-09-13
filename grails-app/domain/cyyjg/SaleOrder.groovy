@@ -8,7 +8,7 @@ class SaleOrder {
 	SaleOrderSource orderSource
 	
 	Customer cust
-	String status = '新建'
+	String status = CONSTANT.ORDER_STATUS_NEW  // 新建
 	
 	Date signDate
 	Date deliveryDate
