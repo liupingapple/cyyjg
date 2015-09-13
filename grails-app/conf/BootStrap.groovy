@@ -90,8 +90,8 @@ class BootStrap {
 	void initCustomer()
 	{
 		println "init initCustomer ..."
-		new Customer(code:"Cust1", name:"测试客户1", abrrName:"客户1").save(failOnError:true)
-		new Customer(code:"Cust2", name:"测试客户2", abrrName:"客户2").save(failOnError:true)
+		new Customer(code:"Cust1", name:"测试客户1", abrrName:"客户1", buyer:"小王", buyerPhone:"18943238898", deliveryAddr1:"北京市海淀区").save(failOnError:true)
+		new Customer(code:"Cust2", name:"测试客户2", abrrName:"客户2", buyer:"小马", buyerPhone:"13643230987", deliveryAddr1:"深圳市南山区").save(failOnError:true)
 	}
 	
 	void initOthers()

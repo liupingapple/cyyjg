@@ -60,8 +60,12 @@ $(function(){
 		
 		<g:if test="${prodInstruct?.status == CONSTANT.INSTRUCT_STATUS_DRAFT }">
 			<p class="text-center">
-			<g:link action="confirmProdInst" id="${bomActualObj?.id }" class="btn btn-success btn-sm">确定生产单</g:link>
+			<g:link action="prodInstConfirm" id="${bomActualObj?.id }" class="btn btn-success btn-sm">确定生产单</g:link>
 		</g:if>
+		<g:elseif test="${prodInstruct?.status == CONSTANT.INSTRUCT_STATUS_CONFIRMED }">
+			<p class="text-center">
+			<g:link action="prodInstProduced" id="${bomActualObj?.id }" class="btn btn-success btn-sm">生产完成，生成送货单</g:link>
+		</g:elseif>
 	</div>
 </div>
 

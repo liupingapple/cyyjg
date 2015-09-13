@@ -91,8 +91,7 @@
 
 <div class="fieldcontain ${hasErrors(bean: customerObj, field: 'buyer', 'error')} ">
 	<label for="buyer">
-		<g:message code="customer.buyer.label" default="Buyer" />
-		
+		<g:message code="customer.buyer.label" default="Buyer" />		
 	</label>
 	<g:textField name="buyer" value="${customerObj?.buyer}"/>
 </div>

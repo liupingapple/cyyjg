@@ -116,14 +116,33 @@ class BomActualController {
         }
     }
 	
-	def confirmProdInst(Long id)
+	def prodInstConfirm(Long id)
 	{
 		def bomActualObj = BomActual.get(id)
-		ProdInstruct prodInst = bomActualObj?.prodInstruct
-		println "prodInst is: ${prodInst}"
 		bomActualObj?.prodInstruct?.status = CONSTANT.INSTRUCT_STATUS_CONFIRMED
 		bomActualObj?.prodInstruct?.save(failOnError:true)
 						
+		redirect(action: "edit", id: id)
+	}
+	
+	def prodInstProduced(Long id)
+	{
+		def bomActualObj = BomActual.get(id)
+		bomActualObj?.prodInstruct?.status = CONSTANT.INSTRUCT_STATUS_PRODUCED
+		bomActualObj?.prodInstruct?.save(failOnError:true)
+		
+		SaleOrderLine orderLine = bomActualObj?.prodInstruct?.saleOrderLine
+		
+		Delivery delivery = new Delivery(code:"S"+bomActualObj?.prodInstruct?.code, saleOrder:orderLine?.saleOrder,
+			prod:orderLine?.prod, addr:orderLine?.saleOrder?.cust?.deliveryAddr1,
+			contact:orderLine?.saleOrder?.cust?.buyer, contactPhone:orderLine?.saleOrder?.cust?.buyerPhone).save(failOnError:true)
+			
+		if (delivery) {
+			flash.message = "生产单已经完成，生成送货单: ${delivery}"
+		} else {
+			flash.message = "生产单已经完成，生成送货单失败"
+		}
+		
 		redirect(action: "edit", id: id)
 	}
 }

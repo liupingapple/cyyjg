@@ -55,12 +55,12 @@ class Customer {
 		financeContact nullable:true
 		cellphone nullable:true
 		phone nullable:true
-		buyer nullable:true
-		buyerPhone nullable:true
+		buyer nullable:false
+		buyerPhone nullable:false
 		salesman nullable:true
 		salesmanPhone nullable:true
 		grossProfitRate nullable:true
-		deliveryAddr1 nullable:true
+		deliveryAddr1 nullable:false
 		deliveryAddr2 nullable:true
 		deliveryAddr3 nullable:true
 		

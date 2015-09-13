@@ -122,7 +122,7 @@ class SaleOrderController {
 		// def currSeq = SaleOrder.list()*.id.max()+1 // 目前id最大值 + 1
 		// saleOrderObj.code = "C"+params['cust.id']+"-"+params['orderSource.id']+"-"+params['signDate'].format('yyMMdd')+"-"+currSeq
 		
-		saleOrderObj.code = "${saleOrderObj.cust.code}-${saleOrderObj.orderSource.code}-${saleOrderObj.signDate.format('yyMMdd')}-${saleOrderObj.id}"
+		saleOrderObj.code = "${saleOrderObj.cust.code}-${saleOrderObj.orderSource.code}${saleOrderObj.signDate.format('yyMMdd')}-${saleOrderObj.id}"
 		saleOrderObj.save()		
 		
         flash.message = message(code: 'default.created.message', args: [message(code: 'saleOrder.label', default: 'SaleOrder'), saleOrderObj.id])
