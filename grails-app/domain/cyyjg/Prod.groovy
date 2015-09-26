@@ -15,7 +15,7 @@ class Prod {
 	Customer cust
 	// 如果该产品是原材料或者不是针对具体客户的，则客户参考代码等于内部唯一代码或者为空
 	String custRefCode // 客户参考编号
-		
+
 	// BomStd bomStd // don't link the associate with BomStd, we just use its id, so the reference will maintained by user
 	long rootBomStdId  // domain Bom 中有Prod字段，而domain Prod中如果再含有Bom字段，对值的影响
 			
@@ -26,11 +26,11 @@ class Prod {
 	
 	static constraints = {
 		custRefCode nullable:true
-		cust nullable:true
+		cust nullable:false
 		code unique:true
 		prodBase(nullable:false, unique:['cust'])
 		
-		rootBomStdId nullable:true
+		rootBomStdId nullable:false
 		
 		comment nullable:true, maxSize:1000
 	}
@@ -39,5 +39,4 @@ class Prod {
 	String toString() {
 		code+"("+prodBase.name+")"
 	}
-		
 }

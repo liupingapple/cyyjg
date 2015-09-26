@@ -33,14 +33,35 @@ class BomActualController {
     }
 
     def save() {
-        def bomActualObj = new BomActual(params)
-        if (!bomActualObj.save(flush: true)) {
-            render(view: "create", model: [bomActualObj: bomActualObj])
-            return
-        }
-
-        flash.message = message(code: 'default.created.message', args: [message(code: 'bomActual.label', default: 'BomActual'), bomActualObj.id])
-        redirect(action: "show", id: bomActualObj.id)
+		def bomActualObj = new BomActual(params)
+		bomActualObj.modifiedBy = session.user
+		
+		def parentBomActual = BomActual.get(params.parentBomId)
+		
+		bomActualObj.prodInstruct = parentBomActual?.prodInstruct
+		
+		if (!parentBomActual) {
+			bomActualObj.mark = "P"
+		}
+		else {
+			// parentBomActual.children*.seq.max() + 1
+			bomActualObj.mark = parentBomActual.mark+(parentBomActual.children?.size()+1)
+			println "bomActualObj.mark: ${bomActualObj.mark}"
+		}
+		
+		if (!bomActualObj.save(flush: true, failOnError:true)) {
+			render(view: "create", model: [bomStdObj: bomActualObj])
+			redirect(action: "edit", id: bomActualObj.id)
+			return
+		}
+		
+		if (parentBomActual) {
+			parentBomActual.addToChildren(bomActualObj)
+			parentBomActual.save(failOnError:true)
+		}
+		
+		flash.message = message(code: 'default.created.message', args: [message(code: 'bomStd.label', default: 'BomStd'), bomActualObj.id])
+		redirect(action: "edit", id: bomActualObj.id)
     }
 
     def show(Long id) {
@@ -129,20 +150,21 @@ class BomActualController {
 	{
 		def bomActualObj = BomActual.get(id)
 		bomActualObj?.prodInstruct?.status = CONSTANT.INSTRUCT_STATUS_PRODUCED
+		bomActualObj?.prodInstruct?.produceFinishedDate = new Date()
 		bomActualObj?.prodInstruct?.save(failOnError:true)
 		
 		SaleOrderLine orderLine = bomActualObj?.prodInstruct?.saleOrderLine
 		
-		Delivery delivery = new Delivery(code:"S"+bomActualObj?.prodInstruct?.code, saleOrder:orderLine?.saleOrder,
-			prod:orderLine?.prod, addr:orderLine?.saleOrder?.cust?.deliveryAddr1,
-			contact:orderLine?.saleOrder?.cust?.buyer, contactPhone:orderLine?.saleOrder?.cust?.buyerPhone).save(failOnError:true)
+		Delivery delivery = new Delivery(code:"S"+bomActualObj?.prodInstruct?.code, prodInstruct:bomActualObj?.prodInstruct, 
+			addr:orderLine?.saleOrder?.cust?.deliveryAddr1,contact:orderLine?.saleOrder?.cust?.buyer, 
+			contactPhone:orderLine?.saleOrder?.cust?.buyerPhone).save(failOnError:true)
 			
 		if (delivery) {
 			flash.message = "生产单已经完成，生成送货单: ${delivery}"
 		} else {
 			flash.message = "生产单已经完成，生成送货单失败"
 		}
-		
+				
 		redirect(action: "edit", id: id)
 	}
 }

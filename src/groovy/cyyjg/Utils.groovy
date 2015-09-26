@@ -4,7 +4,7 @@ class Utils {
 	
 	static boolean isRootBom(Bom bom) {
 		// sometimes when create new child, before it added into parent, its !bom.parent==true, so we add more condition to verify mark
-		!bom.parent && (bom.mark == "S" || bom.mark == "P" )
+		!bom?.parent && (bom?.mark == "S" || bom?.mark == "P" )
 	}
 	
 	static Bom getRootBom(Bom bom)

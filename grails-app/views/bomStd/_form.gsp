@@ -25,6 +25,20 @@ $(function(){
 
     
 });
+
+function mouseover(i) {
+	$("#btnX"+i).show();
+	$("#btnY"+i).show();
+	$("#btnZ"+i).show();
+}
+function mouseout(i) {
+	$("#btnX"+i).hide();
+	$("#btnY"+i).hide();
+	$("#btnZ"+i).hide();
+}
+function tog(new_xy) {
+	$("#"+new_xy).toggle();
+}
 </script>
 
 <g:set var="rootBom" value="${Utils.getRootBom(bomStdObj) }"></g:set>

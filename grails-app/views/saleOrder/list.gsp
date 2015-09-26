@@ -52,7 +52,7 @@
 								
 									<td>${fieldValue(bean: saleOrderObj, field: "status")}</td>
 								
-									<td><g:formatDate date="${saleOrderObj.signDate}" /></td>
+									<td><g:formatDate date="${saleOrderObj.signDate}" format="yyyy-MM-dd"/></td>
 								<%--
 									<td><g:formatDate date="${saleOrderObj.deliveryDate}" /></td>
 								 --%>

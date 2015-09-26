@@ -1,14 +1,14 @@
 package cyyjg
 
 class BomActual extends Bom {
-	
-	EndUser modifiedBy
-	
-	String status = '草稿'
+		
+	// String status = '新建'
 		
 	static belongsTo = [prodInstruct:ProdInstruct]
 	
-	long refBomStdId
+	long refBomStdId	
+	String batch // 批次, 领料员将会在最终确认生产单之后填写上半成品或者原材料的批次
+	EndUser modifiedBy
 	
 	// transients
 	SaleOrderLine saleOrderLine
@@ -18,7 +18,8 @@ class BomActual extends Bom {
 		prodInstruct()
 		refBomStdId(nullable:true)
 		modifiedBy (nullable:false)
-		status (inList:['草稿', '确认', '审批通过']) 
+		batch (nullable:true)
+		// status (inList:['草稿', '确认', '审批通过']) 
     }
 	
 	SaleOrderLine getSaleOrderLine()

@@ -115,15 +115,6 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${bomActualObj?.status}">
-				<li class="fieldcontain">
-					<span id="status-label" class="property-label"><g:message code="bomActual.status.label" default="Status" /></span>
-					
-						<span class="property-value" aria-labelledby="status-label"><g:fieldValue bean="${bomActualObj}" field="status"/></span>
-					
-				</li>
-				</g:if>
-			
 				<g:if test="${bomActualObj?.dateCreated}">
 				<li class="fieldcontain">
 					<span id="dateCreated-label" class="property-label"><g:message code="bomActual.dateCreated.label" default="Date Created" /></span>

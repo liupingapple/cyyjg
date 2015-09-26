@@ -16,6 +16,8 @@ class ProdInstruct {
 	
 	String status = CONSTANT.INSTRUCT_STATUS_DRAFT
 	
+	Date produceFinishedDate
+	
 	String comment
 	
 	/**
@@ -34,6 +36,7 @@ class ProdInstruct {
 		rootBomActual nullable:true
 		lastOne nullable:true
 		status inList:CONSTANT.INSTRUCT_STATUSes
+		produceFinishedDate nullable:true
 		comment nullable:true, maxSize:1000
     }
 	

@@ -21,10 +21,14 @@ class ProdController {
         params.max = Math.min(max ?: 10, 100)
 		
 		def prodList = Prod.where {
-			rootBomStdId > 0
+			rootBomStdId > 0 || cust != null
 		}.list(params)
 		
-        [prodObjList: prodList, prodObjTotal: Prod.count()]
+		def prodCount = Prod.where {
+			rootBomStdId > 0 || cust != null		
+		}.list().size()
+		
+        [prodObjList: prodList, prodObjTotal: prodCount]
     }
 
     def create() {

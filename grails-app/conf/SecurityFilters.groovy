@@ -11,8 +11,8 @@ class SecurityFilters {
 					
 					if (actionName) {
 						return false // must return false if actionName has value, otherwise will get CannotRedirectException - A previous call to redirect(..) has already redirected the response.
-					} else {
-						// do nothing if no actionName  // don't return false, otherwise, we will get 'HTTP Status 404 - "/index.gsp" not found..' for /cyyjg
+					} else {						
+						// do nothing or return true if no actionName  // don't return false, otherwise, we will get 'HTTP Status 404 - "/index.gsp" not found..' for /cyyjg
 					}
 				}
 			}

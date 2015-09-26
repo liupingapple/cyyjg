@@ -17,18 +17,32 @@ class BomStdController {
 	
 	// only used to create the root BOM
     def create() {
-		if (!params.mark){
-			params.mark = "S" // the root of standard BOM is only one char 'S'
+		def bomStdObj = null
+		
+		// for rootBomStd, should be unique
+		BomStd checkBom = BomStd.findByMarkAndProd("S", Prod.get(params['prod.id']))
+		if (checkBom) {
+			bomStdObj = checkBom
+		} 
+		else 
+		{
+			if (!params.mark){
+				params.mark = "S" // the root of standard BOM is only one char 'S'
+			}
+			
+			if (!params.unit){
+				params.unit = "千克"
+			}
+			
+			bomStdObj = new BomStd(params)
+			bomStdObj.quantity = 1
+			if (!bomStdObj.save(failOnError:true)) {
+				render(view: "create", model: [bomStdObj: bomStdObj])
+				redirect(action: "edit", id: bomStdObj.id)
+				return
+			}
 		}
-		
-		def bomStdObj = new BomStd(params)
-		
-		if (!bomStdObj.save(flush: true, failOnError:true)) {
-			render(view: "create", model: [bomStdObj: bomStdObj])
-			redirect(action: "edit", id: bomStdObj.id)
-			return
-		}
-		
+			
 		redirect(action: "edit", id: bomStdObj.id)
     }
 
@@ -42,7 +56,6 @@ class BomStdController {
 		else {
 			// parentBomStd.children*.seq.max() + 1
 			bomStdObj.mark = parentBomStd.mark+(parentBomStd.children?.size()+1)			
-			println "bomStdObj.mark: ${bomStdObj.mark}"			
 		}
 		
         if (!bomStdObj.save(flush: true, failOnError:true)) {

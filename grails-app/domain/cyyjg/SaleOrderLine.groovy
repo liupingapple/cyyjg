@@ -13,6 +13,7 @@ class SaleOrderLine {
 	String priceFlag = "C"
 	
 	Date deliveryDate
+	String am_pm = ""
 	
 	String comment
 	
@@ -32,6 +33,7 @@ class SaleOrderLine {
 		prodBatch nullable:true
 		
 		deliveryDate nullable:true
+		am_pm inList:cyyjg.CONSTANT.AM_PM_LIST
 		comment nullable:true, maxSize:1000
     }
 	

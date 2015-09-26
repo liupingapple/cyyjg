@@ -30,12 +30,11 @@ session.fromId = saleOrderObj?.id
 %>
 <table class="table table-bordered table-hover text-center">
   <tr>
-    <th style="width:10%">操作</th>
-    <th style="width:15%">产品&nbsp;[<g:link controller="prod" action="create" params="${['cust.id':saleOrderObj.cust.id] }">新增</g:link>]</th> <!--  -->
-    <th style="width:5%">数量</th>
-    <th style="width:10%">计量单位</th>
-    <th style="width:18%">价格&nbsp;|&nbsp;总价</th>
-    <th style="width:25%">交货日期</th>
+    <th style="width:12%">操作</th>
+    <th style="width:18%">产品&nbsp;[<g:link controller="prod" action="create" params="${['cust.id':saleOrderObj.cust.id] }">新增</g:link>]</th> <!--  -->
+    <th style="width:8%">数量(千克)</th>
+    <th style="width:15%">价格(元/千克)&nbsp;|&nbsp;总价</th>
+    <th style="width:23%">交货日期</th>
     <th>备注</th>
   </tr>
   
@@ -47,31 +46,40 @@ session.fromId = saleOrderObj?.id
   <tr class="text-center">
    	<g:hiddenField name="id" value="${orderLine.id}"/>
    	<g:hiddenField name="version" value="${orderLine?.version}" />
+   	<g:set var="prodInstruct" value="${cyyjg.ProdInstruct.findBySaleOrderLine(orderLine) }"></g:set>
     <td>
     	<div class="btn-group" role="group" aria-label="...">		  	
-    		<g:actionSubmit class="btn btn-info btn-xs" action="update_saleOrderLine" value="更改"/>
-    		<g:if test="${cyyjg.ProdInstruct.findBySaleOrderLine(orderLine) }">
+    		<g:if test="${!cyyjg.Delivery.findByProdInstruct(prodInstruct) }">
+    			<g:actionSubmit class="btn btn-info btn-xs" action="update_saleOrderLine" value="修改"/>
+    		</g:if>
+    		<g:if test="${prodInstruct}">
     			<g:link class="btn btn-success btn-xs" controller="bomActual" action="edit" id="${cyyjg.ProdInstruct.findBySaleOrderLine(orderLine)?.rootBomActual?.id }">生产单</g:link>
     		</g:if>
     		<g:else>
+    			<g:link class="btn btn-success btn-xs" action="produceInst" id="${orderLine?.id}" onclick="return confirm('确定后，将会生成对应的生产单');">生产</g:link>
     			<g:actionSubmit class="btn btn-danger btn-xs" action="del_saleOrderLine" value="删除"/>
     		</g:else>
 		</div>
 	</td>
     <td><g:link controller="prod" action="show" id="${orderLine?.prod.id}"> ${orderLine?.prod}</g:link></td>
     <td><g:textField class="qblank" name="quantity" size="3" value="${fieldValue(bean: orderLine, field: 'quantity')}" required=""/></td>
-    <td><g:select name="unit" from="${orderLine.constraints.unit.inList}" value="${orderLine?.unit}" valueMessagePrefix="saleOrderLine.unit"/></td>        
+    
+    <%--<td><g:select name="unit" from="${orderLine.constraints.unit.inList}" value="${orderLine?.unit}" valueMessagePrefix="saleOrderLine.unit"/></td> --%>  
+         
     <td><g:textField class="qblank"  name="price" size="3" value="${orderLine?.price}"/>&nbsp;&nbsp;{${orderLine?.priceFlag}}
-    	,&nbsp;Sum:&nbsp;${ new java.text.DecimalFormat("0.00").format(orderLine.quantity*orderLine.price) }
+    	,&nbsp;共:&nbsp;${ new java.text.DecimalFormat("0.00").format(orderLine.quantity*orderLine.price) }
     </td>
     
-    <td><g:datePicker name="deliveryDate" precision="day"  value="${orderLine?.deliveryDate}" default="none" relativeYears="${-3..3 }"/></td>
+    <td><g:datePicker name="deliveryDate" precision="day"  value="${orderLine?.deliveryDate}" default="none" relativeYears="${-3..3 }"/>
+    	&nbsp;<g:select name="am_pm" from="${cyyjg.CONSTANT.AM_PM_LIST}" value="${orderLine?.am_pm}" valueMessagePrefix="saleOrderLine.am_pm"/>
+    </td>
+    
     <td><g:textField class="qblank"  name="comment" size="30" value="${orderLine?.comment}"/></td>
   </tr>
   </g:form>
   </g:each>
   
-  <g:if test="${saleOrderObj?.status == cyyjg.CONSTANT.ORDER_STATUS_NEW }">
+  <g:if test="${saleOrderObj?.status == cyyjg.CONSTANT.ORDER_STATUS_NEW || saleOrderObj?.status == cyyjg.CONSTANT.ORDER_STATUS_CONFIRMED}">
   <g:form name="form_insertSaleOrderLine" controller="saleOrder" name="orderLineForm" method="post">
   <g:hiddenField name="saleOrder.id" value="${saleOrderObj?.id }"/>
   <tr>
@@ -91,9 +99,14 @@ session.fromId = saleOrderObj?.id
     	<g:render template="prodInput_template"/>
     </td>
     <td><g:textField class="qblank"  name="quantity" size="3" value="" required=""/></td>
-    <td><g:select name="unit" from="${cyyjg.CONSTANT.UNITs}" value="" valueMessagePrefix="saleOrderLine.unit" /></td>
+    
+    <g:hiddenField name="unit" value="千克"/>
+    <%--<td><g:select name="unit" from="${cyyjg.CONSTANT.UNITs}" value="千克" valueMessagePrefix="saleOrderLine.unit" /></td> --%>
+    
     <td><g:select name="price" from="${['A-上次订单价格','B-产品标准价格']}"/></td>
-    <td><g:datePicker name="deliveryDate" precision="day"  value="${new Date()}" default="none" relativeYears="${-3..3 }"/></td>
+    <td><g:datePicker name="deliveryDate" precision="day"  value="${new Date()}" default="none" relativeYears="${-3..3 }"/>
+    	&nbsp;<g:select name="am_pm" from="${cyyjg.CONSTANT.AM_PM_LIST}" value="" valueMessagePrefix="saleOrderLine.am_pm"/>
+    </td>
     <td><g:textField class="qblank" name="comment" size="30" value=""/></td>
   </tr>
   </g:form>

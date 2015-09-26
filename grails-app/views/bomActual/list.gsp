@@ -42,7 +42,7 @@
 				<g:each in="${bomActualObjList}" status="i" var="bomActualObj">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
-						<td><g:link action="show" id="${bomActualObj.id}">${fieldValue(bean: bomActualObj, field: "prod")}</g:link></td>
+						<td><g:link action="edit" id="${bomActualObj.id}">${fieldValue(bean: bomActualObj, field: "prod")}</g:link></td>
 					
 						<td>${fieldValue(bean: bomActualObj, field: "mark")}</td>
 					

@@ -78,8 +78,8 @@
 							<g:form>
 									<g:hiddenField name="id" value="${saleOrderObj?.id}" />
 									<g:link class="btn btn-primary btn-sm" action="edit" id="${saleOrderObj?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-									<g:if test="${saleOrderObj?.status == CONSTANT.ORDER_STATUS_NEW }">
-										<g:link class="btn btn-success btn-sm" action="confirm" id="${saleOrderObj?.id}" onclick="return confirm('订单确定后，将会生成对应的生产单');">确认</g:link>
+									<g:if test="${saleOrderObj?.status == CONSTANT.ORDER_STATUS_NEW }">		
+										<%-- <g:link class="btn btn-success btn-sm" action="confirm" id="${saleOrderObj?.id}" onclick="return confirm('确定后，将会生成对应的生产单');">确认</g:link> --%>								
 										<g:actionSubmit class="btn btn-danger btn-sm" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
 									</g:if>
 							</g:form>

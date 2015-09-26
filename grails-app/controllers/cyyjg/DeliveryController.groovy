@@ -76,6 +76,31 @@ class DeliveryController {
             render(view: "edit", model: [deliveryObj: deliveryObj])
             return
         }
+		
+		if (deliveryObj.status == CONSTANT.DELIVERY_STATUS_INWAY) {
+			deliveryObj.prodInstruct.status = CONSTANT.INSTRUCT_STATUS_DELIVERED
+			deliveryObj.prodInstruct.save()
+		}
+		
+		if (deliveryObj.status == CONSTANT.DELIVERY_STATUS_RECEIVED) {
+			deliveryObj.prodInstruct.status = CONSTANT.INSTRUCT_STATUS_DONE
+			deliveryObj.prodInstruct.save()
+		}
+		
+		SaleOrder saleOrder = deliveryObj.prodInstruct.saleOrderLine.saleOrder
+		
+		def allDone = true
+		saleOrder.orderLines.each { orderLine->
+			ProdInstruct pinst = ProdInstruct.findBySaleOrderLine(orderLine)
+			if (pinst.status != CONSTANT.INSTRUCT_STATUS_DONE) {
+				allDone = false
+			}
+		}
+		
+		if (allDone) {
+			saleOrder.status = CONSTANT.ORDER_STATUS_FINISHED
+			saleOrder.save()
+		}
 
         flash.message = message(code: 'default.updated.message', args: [message(code: 'delivery.label', default: 'Delivery'), deliveryObj.id])
         redirect(action: "show", id: deliveryObj.id)

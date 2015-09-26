@@ -42,4 +42,9 @@ class ProdBase {
 	String toString() {
 		"${code} - ${name}"
 	}
+	
+	def afterInsert = {
+		Customer cust = Customer.findByCode("0");
+		Prod p0 = new Prod(code:this.code, custRefCode:"0", cust:cust, prodBase:this).save(failOnError:true) 
+	}
 }
