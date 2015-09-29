@@ -15,10 +15,10 @@ $(function(){
         	var children = $(this).parent('li.parent_li').find(' > ul > li');
             if (children.is(":visible")) {
                 children.hide('fast');
-                $(this).attr('title', '展开').find(' > i').addClass('glyphicon glyphicon-plus').removeClass('glyphicon glyphicon-minus');
+                $(this).attr('title', '展开').find(' > i').addClass('glyphicon-plus').removeClass('glyphicon-minus');
             } else {
                 children.show('fast');
-                $(this).attr('title', '折叠').find(' > i').addClass('glyphicon glyphicon-minus').removeClass('glyphicon glyphicon-plus');
+                $(this).attr('title', '折叠').find(' > i').addClass('glyphicon-minus').removeClass('glyphicon-plus');
             }
             e.stopPropagation();
         }
@@ -80,6 +80,7 @@ function tog(new_xy) {
 		</div>
 	</div>
 --%>
+
 </g:if>
 
 <div class="tree">
@@ -96,7 +97,7 @@ function tog(new_xy) {
 			<g:link controller="delivery" action="show" id="${delivery.id }">${delivery }</g:link> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;			
 		</g:elseif>
 <ul>
-	<li>
+	<li class="glyphicon">
 		<span>
 			<i class="glyphicon glyphicon-minus"></i><label>${rootBom? rootBom:'新...' }</label>	
 		</span>		
@@ -113,7 +114,7 @@ function tog(new_xy) {
 		
 		<ul>
 		<g:each in="${rootBom?.children }" var="child" status="i">
-				<li>
+				<li class="glyphicon">
 					<span><i class="glyphicon glyphicon-minus"></i><label>${child }</label>	
 						<g:if test="${bomActualObj==child }"><span class="glyphicon glyphicon-hand-left" aria-hidden="true"></span>&nbsp;</g:if>
 					</span>		
@@ -129,7 +130,7 @@ function tog(new_xy) {
 					</span>
 					<ul>
 						<g:each in="${child?.children }" var="grandChild" status="ii">
-							<li>
+							<li class="glyphicon">
 								<span>
 									<i class="icon-leaf"></i><label>${grandChild }</label>
 									<g:if test="${bomActualObj==grandChild }"><span class="glyphicon glyphicon-hand-left" aria-hidden="true"></span>&nbsp;</g:if>

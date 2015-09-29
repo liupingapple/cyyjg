@@ -40,7 +40,6 @@
 
 									<th><g:message code="prodInstruct.lastOne.label" default="Last One" /></th>
 
-
 									<th>${message(code: 'prodInstruct.comment.label', default: 'Comment')}</th>
 
 								</tr>
@@ -49,8 +48,8 @@
 								<g:each in="${prodInstructObjList}" status="i" var="prodInstructObj">
 									<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 										<td>
-											<g:checkBox name="selected${prodInstructObj.rootBomActual.id }" checked="false"/>领料
-											<g:link class="btn btn-primary btn-xs" controller="bomActual" action="edit" id="${prodInstructObj.rootBomActual.id }">
+											<g:checkBox name="selected${prodInstructObj?.rootBomActual?.id }" checked="false"/>领料
+											<g:link class="btn btn-primary btn-xs" controller="bomActual" action="edit" id="${prodInstructObj?.rootBomActual?.id }">
 												编辑
 											</g:link>
 										</td>
@@ -59,7 +58,7 @@
 										</td>
 										
 										<td>
-											<a onclick="showBom(${prodInstructObj.rootBomActual.id })">
+											<a onclick="showBom(${prodInstructObj?.rootBomActual?.id })">
 												${fieldValue(bean: prodInstructObj, field: "rootBomActual")}
 											</a>											
 										</td>
@@ -69,7 +68,7 @@
 										</td>
 										
 										<td>
-											<g:formatDate date="${prodInstructObj.saleOrderLine.deliveryDate}" format="yyyy-MM-dd"/>
+											<g:formatDate date="${prodInstructObj?.saleOrderLine?.deliveryDate}" format="yyyy-MM-dd"/>
 											${prodInstructObj.saleOrderLine.am_pm }						
 										</td>
 
@@ -82,12 +81,13 @@
 										</td>
 
 									</tr>
-									
-									<tr id="bom${prodInstructObj.rootBomActual.id }" style="display: none">
+									<g:if test="${prodInstructObj?.rootBomActual }">
+									<tr id="bom${prodInstructObj?.rootBomActual?.id }" style="display: none">
 										<td colspan="7">
-											<g:render template="form" contextPath="../bomActual" model="[bomActualObj:prodInstructObj.rootBomActual]"></g:render>
+											<g:render template="form" contextPath="../bomActual" model="[bomActualObj:prodInstructObj?.rootBomActual]"></g:render>
 										</td>
 									</tr>
+									</g:if>
 								</g:each>
 							</tbody>
 						</table>

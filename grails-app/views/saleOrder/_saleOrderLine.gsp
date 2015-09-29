@@ -28,7 +28,7 @@ session.fromController = 'saleOrder'
 session.fromAction = 'show'
 session.fromId = saleOrderObj?.id
 %>
-<table class="table table-bordered table-hover text-center">
+<table class="table table-bordered text-center">
   <tr>
     <th style="width:12%">操作</th>
     <th style="width:18%">产品&nbsp;[<g:link controller="prod" action="create" params="${['cust.id':saleOrderObj.cust.id] }">新增</g:link>]</th> <!--  -->
@@ -39,6 +39,7 @@ session.fromId = saleOrderObj?.id
   </tr>
   
   <g:each in="${saleOrderObj?.orderLines?}" var="orderLine" status="i">  
+  <g:set var="prodInstruct" value="${cyyjg.ProdInstruct.findBySaleOrderLine(orderLine) }"></g:set>
   
   <!-- please note the controller is saleOrder, not saleOrderLine -->
   <g:form name="form${i+1}" controller="saleOrder" name="orderLineForm" method="post">
@@ -46,14 +47,16 @@ session.fromId = saleOrderObj?.id
   <tr class="text-center">
    	<g:hiddenField name="id" value="${orderLine.id}"/>
    	<g:hiddenField name="version" value="${orderLine?.version}" />
-   	<g:set var="prodInstruct" value="${cyyjg.ProdInstruct.findBySaleOrderLine(orderLine) }"></g:set>
     <td>
     	<div class="btn-group" role="group" aria-label="...">		  	
-    		<g:if test="${!cyyjg.Delivery.findByProdInstruct(prodInstruct) }">
+    		<g:if test="${!prodInstruct?.rootBomActual  }"> <%--&& !cyyjg.Delivery.findByProdInstruct(prodInstruct) --%>
     			<g:actionSubmit class="btn btn-info btn-xs" action="update_saleOrderLine" value="修改"/>
     		</g:if>
-    		<g:if test="${prodInstruct}">
-    			<g:link class="btn btn-success btn-xs" controller="bomActual" action="edit" id="${cyyjg.ProdInstruct.findBySaleOrderLine(orderLine)?.rootBomActual?.id }">生产单</g:link>
+    		<g:if test="${prodInstruct && prodInstruct?.rootBomActual}">
+    			<%-- <g:link class="btn btn-success btn-xs" controller="bomActual" action="edit" id="${prodInstruct?.rootBomActual?.id }">生产单</g:link>--%>
+    			<a id="showProdBtn${prodInstruct?.rootBomActual?.id }" class="btn btn-success btn-xs glyphicon glyphicon-chevron-down" onclick="showBom(${prodInstruct?.rootBomActual?.id })">
+					生产单
+				</a>
     		</g:if>
     		<g:else>
     			<g:link class="btn btn-success btn-xs" action="produceInst" id="${orderLine?.id}" onclick="return confirm('确定后，将会生成对应的生产单');">生产</g:link>
@@ -77,6 +80,13 @@ session.fromId = saleOrderObj?.id
     <td><g:textField class="qblank"  name="comment" size="30" value="${orderLine?.comment}"/></td>
   </tr>
   </g:form>
+  <g:if test="${prodInstruct?.rootBomActual }">
+	<tr class="text-left" id="bom${prodInstruct?.rootBomActual?.id }" style="display: none">
+		<td colspan="6">
+			<g:render template="form" contextPath="../bomActual" model="[bomActualObj:prodInstruct?.rootBomActual]"></g:render>
+		</td>
+	</tr>
+  </g:if>
   </g:each>
   
   <g:if test="${saleOrderObj?.status == cyyjg.CONSTANT.ORDER_STATUS_NEW || saleOrderObj?.status == cyyjg.CONSTANT.ORDER_STATUS_CONFIRMED}">
@@ -113,6 +123,19 @@ session.fromId = saleOrderObj?.id
   </g:if>
   
 </table>
+
+<script type="text/javascript">
+	function showBom(rootBomId)
+	{
+		$("#bom"+rootBomId).toggle();
+		if ($("#bom"+rootBomId).is(":hidden")) {
+			$("#showProdBtn"+rootBomId).addClass("glyphicon-chevron-down").removeClass("glyphicon-chevron-up");
+		} else {
+			$("#showProdBtn"+rootBomId).addClass("glyphicon-chevron-up").removeClass("glyphicon-chevron-down");
+		}		
+	}
+</script>
+
 <%--
 <g:link class="btn btn-info btn-sm" controller="saleOrderLine" action="create" params="['saleOrder.id': saleOrderObj?.id]">${message(code: 'default.add.label', args: [message(code: 'saleOrderLine.label', default: 'SaleOrderLine')])}</g:link>
  --%>

@@ -300,7 +300,7 @@ class SaleOrderController {
         def saleOrderLineObj = SaleOrderLine.get(id)
         if (!saleOrderLineObj) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'saleOrderLine.label', default: 'SaleOrderLine'), id])
-            render(view: "show", model: [saleOrderLineObj: saleOrderLineObj])
+            render(view: "show", model: [saleOrderObj:saleOrderLineObj.saleOrder, saleOrderLineObj: saleOrderLineObj])
             return
         }
 
@@ -311,7 +311,7 @@ class SaleOrderController {
         }
         catch (DataIntegrityViolationException e) {
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'saleOrderLine.label', default: 'SaleOrderLine'), id])
-            render(view: "show", model: [saleOrderLineObj: saleOrderLineObj])
+            render(view: "show", model: [saleOrderObj:saleOrderLineObj.saleOrder, saleOrderLineObj: saleOrderLineObj])
         }
 	}
 
