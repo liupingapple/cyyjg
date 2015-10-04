@@ -2,7 +2,7 @@ package cyyjg
 
 import java.util.ArrayList;
 
-class CONSTANT {	
+class CONSTANT {
 	final static PROD_TYPEs = ['原材料', '半成品', '成品', '包装品']
 	final static PROD_INVENTORY_TYPEs = ['原材料', '半成品', '成品', '废品', '包装品']
 	
@@ -38,6 +38,8 @@ class CONSTANT {
 	final static UNITs = ['克', '千克']
 	
 	final static AM_PM_LIST = ["", "下午", "上午"]
+	
+	final static String PROD_IMAGE_DIR = "prod_images";
 	
 	final static ArrayList PROVINCEs = [
 		'安徽',

@@ -1,6 +1,8 @@
 package cyyjg
 
 import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 
 class ProdBaseController {
 
@@ -99,4 +101,32 @@ class ProdBaseController {
             redirect(action: "show", id: id)
         }
     }
+	
+	def uploadImage(Long id) {		
+		// the request will be org.springframework.web.multipart.MultipartHttpServletRequest if <form enctype="multipart/form-data">
+		def f = request.getFile('myFile')
+		if (f.empty) {
+			flash.message = '文件不能为空'
+			redirect(action: "edit", id: id)
+			return
+		}
+		
+		if (f.size > 1024*100 || f.size < 1024*1) {
+			flash.message = '文件大小必须小于200K，大于1K'
+			redirect(action: "edit", id: id)
+			return
+		}
+				
+		def realDir = servletContext.getRealPath("/")+CONSTANT.PROD_IMAGE_DIR
+		def orgFileName = ((org.springframework.web.multipart.commons.CommonsMultipartFile)f).originalFilename //fileItem.name; 
+		
+		def dir = new File(realDir);
+		if (!dir.exists()) {
+			dir.mkdir()
+		}
+		
+		f.transferTo(new File(realDir+"/"+orgFileName))
+								
+		redirect(action: "edit", id: id, params:[imageName:orgFileName])
+	}
 }

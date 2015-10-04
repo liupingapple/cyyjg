@@ -40,15 +40,15 @@ class BootStrap {
 		def pbase6 = new ProdBase(code:"W-001", name:"色粉W", type:'原材料', stdPrice:3).save(failOnError:true)
 
 		Prod p0 = new Prod(code:"${cust.code}-305C", custRefCode:"${cust.code}-305C", cust:cust, prodBase:pbase1).save(failOnError:true)
-		BomStd bomP0 = new BomStd(prod:p0, mark:'S', quantity:1, comment:"This is a example of EngBOM for ${p0}").save(failOnError:true)
+		BomStd bomP0 = new BomStd(prod:p0, mark:'S', quantity:1, unit:'千克', comment:"This is a example of EngBOM for ${p0}").save(failOnError:true)
 		p0.save()
 		//------ Level-0 done
 		
 		Prod p1s1 = Prod.findByCode(pbase2.code) // new Prod(code:'C001', prodBase:pbase2).save(failOnError:true)
-		BomStd comp_p1s1 = new BomStd(prod:p1s1, mark:'S1', quantity:0.3).save(failOnError:true)
+		BomStd comp_p1s1 = new BomStd(prod:p1s1, mark:'S1', quantity:300, unit:'克').save(failOnError:true)
 		
 		Prod p1s2 = Prod.findByCode(pbase3.code) // new Prod(code:'CY924', custRefCode:'CY924', prodBase:pbase3).save(failOnError:true)
-		BomStd comp_p1s2 = new BomStd(prod:p1s2, mark:'S2', quantity:0.21).save(failOnError:true)
+		BomStd comp_p1s2 = new BomStd(prod:p1s2, mark:'S2', quantity:700, unit:'克').save(failOnError:true)
 		
 		bomP0.addToChildren(comp_p1s1)
 		bomP0.addToChildren(comp_p1s2)
@@ -56,19 +56,19 @@ class BootStrap {
 		//----------------- Level-1 done
 		
 		Prod p2s1 = Prod.findByCode(pbase4.code) // new Prod(code:'R-001', prodBase:pbase4).save(failOnError:true)
-		BomStd comp_p2s1 = new BomStd(prod:p2s1, mark:'S11', quantity:0.1).save()
+		BomStd comp_p2s1 = new BomStd(prod:p2s1, mark:'S11', quantity:100, unit:'克').save()
 		comp_p1s1.addToChildren(comp_p2s1)
 		
 		Prod p2s2 = Prod.findByCode(pbase5.code) // new Prod(code:'E50', prodBase:pbase5).save(failOnError:true)
-		BomStd comp_p2s2 = new BomStd(prod:p2s2, mark:'S21', quantity:0.2).save(failOnError:true)
+		BomStd comp_p2s2 = new BomStd(prod:p2s2, mark:'S21', quantity:200, unit:'克').save(failOnError:true)
 		comp_p1s2.addToChildren(comp_p2s2)
 		
 		Prod p2s3 = Prod.findByCode(pbase6.code) // new Prod(code:' W-001', prodBase:pbase6).save(failOnError:true)
-		BomStd comp_p2s3 = new BomStd(prod:p2s3, mark:'S22', quantity:0.2).save(failOnError:true)
+		BomStd comp_p2s3 = new BomStd(prod:p2s3, mark:'S22', quantity:500, unit:'克').save(failOnError:true)
 		comp_p1s2.addToChildren(comp_p2s3)
 		
 		Prod p2s4 = p2s2
-		BomStd comp_p2s4 = new BomStd(prod:p2s4, mark:'S12', quantity:0.2).save(failOnError:true)
+		BomStd comp_p2s4 = new BomStd(prod:p2s4, mark:'S12', quantity:200, unit:'克').save(failOnError:true)
 		comp_p1s1.addToChildren(comp_p2s4)
 		
 		comp_p1s1.save(failOnError:true)

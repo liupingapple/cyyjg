@@ -1,4 +1,4 @@
-
+<%@ page import="cyyjg.CONSTANT" %>
 <%@ page import="cyyjg.ProdBase" %>
 <!DOCTYPE html>
 <html>
@@ -38,6 +38,14 @@
 					
 						<span class="property-value" aria-labelledby="name-label"><g:fieldValue bean="${prodBaseObj}" field="name"/></span>
 					
+				</li>
+				</g:if>
+				
+				<g:if test="${prodBaseObj?.imageName}">
+				<li class="fieldcontain">
+					<span id="imageName-label" class="property-label"><g:message code="prodBase.imageName.label" default="imageName" /></span>
+					
+					<g:img dir="${CONSTANT.PROD_IMAGE_DIR }" file="${prodBaseObj?.imageName }"/>					
 				</li>
 				</g:if>
 			

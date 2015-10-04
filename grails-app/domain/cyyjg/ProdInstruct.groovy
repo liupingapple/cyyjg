@@ -16,7 +16,7 @@ class ProdInstruct {
 	
 	String status = CONSTANT.INSTRUCT_STATUS_DRAFT
 	
-	Date produceFinishedDate
+	Date produceFinishedDate	
 	
 	String comment
 	

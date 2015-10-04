@@ -1,4 +1,5 @@
 
+<%@page import="cyyjg.CONSTANT"%>
 <%@ page import="cyyjg.ProdInstruct"%>
 <!DOCTYPE html>
 <html>
@@ -65,6 +66,7 @@
 
 										<td>
 											${fieldValue(bean: prodInstructObj, field: "status")}
+											<g:if test="${prodInstructObj?.rootBomActual?.batch}">批次：${prodInstructObj?.rootBomActual?.batch}</g:if>
 										</td>
 										
 										<td>

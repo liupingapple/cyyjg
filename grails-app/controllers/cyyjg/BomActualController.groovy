@@ -1,5 +1,7 @@
 package cyyjg
 
+import javassist.bytecode.stackmap.BasicBlock.Catch;
+
 import org.springframework.dao.DataIntegrityViolationException
 
 class BomActualController {
@@ -139,23 +141,51 @@ class BomActualController {
 	
 	def prodInstConfirm(Long id)
 	{
-		def bomActualObj = BomActual.get(id)
-		bomActualObj?.prodInstruct?.status = CONSTANT.INSTRUCT_STATUS_CONFIRMED
-		bomActualObj?.prodInstruct?.save(failOnError:true)
+		flash.message = ""
+		
+		def bomRoot = cyyjg.Utils.getRootBom(BomActual.get(id))
+		
+		// check the quantity of children
+		def childTotalQuantity = 0
+		
+		bomRoot.children.each { child ->
+			childTotalQuantity += child.quantity
+			
+			def grandChildTotalQuantity = 0
+			child.children.each { grandChild ->
+				grandChildTotalQuantity += grandChild.quantity
+			}
+			
+			if (child.quantity != grandChildTotalQuantity) {
+				flash.message += "${child}的数量与其所有下级组成成分数量之和不一致！<br>"
+			}
+		}
+		
+		if (bomRoot.quantity*1000 != childTotalQuantity) {
+			flash.message += "${bomRoot}的数量与其所有下级组成成分数量之和不一致！<br>"
+		}
+		
+		if (!flash.message) {
+			bomRoot?.prodInstruct?.status = CONSTANT.INSTRUCT_STATUS_CONFIRMED
+			bomRoot?.prodInstruct?.save(failOnError:true)
+		}
 						
 		redirect(action: "edit", id: id)
 	}
 	
 	def prodInstProduced(Long id)
 	{
-		def bomActualObj = BomActual.get(id)
-		bomActualObj?.prodInstruct?.status = CONSTANT.INSTRUCT_STATUS_PRODUCED
-		bomActualObj?.prodInstruct?.produceFinishedDate = new Date()
-		bomActualObj?.prodInstruct?.save(failOnError:true)
+		def bomRoot = cyyjg.Utils.getRootBom(BomActual.get(id))
 		
-		SaleOrderLine orderLine = bomActualObj?.prodInstruct?.saleOrderLine
+		bomRoot?.prodInstruct?.status = CONSTANT.INSTRUCT_STATUS_PRODUCED
+		bomRoot?.prodInstruct?.produceFinishedDate = new Date()
+		bomRoot?.prodInstruct?.save(failOnError:true)
 		
-		Delivery delivery = new Delivery(code:"S"+bomActualObj?.prodInstruct?.code, prodInstruct:bomActualObj?.prodInstruct, 
+		bomRoot.batch = bomRoot?.prodInstruct?.produceFinishedDate.toString()
+		
+		SaleOrderLine orderLine = bomRoot?.prodInstruct?.saleOrderLine
+		
+		Delivery delivery = new Delivery(code:"S"+bomRoot?.prodInstruct?.code, prodInstruct:bomRoot?.prodInstruct, 
 			addr:orderLine?.saleOrder?.cust?.deliveryAddr1,contact:orderLine?.saleOrder?.cust?.buyer, 
 			contactPhone:orderLine?.saleOrder?.cust?.buyerPhone).save(failOnError:true)
 			
@@ -165,6 +195,80 @@ class BomActualController {
 			flash.message = "生产单已经完成，生成送货单失败"
 		}
 				
+		redirect(action: "edit", id: id)
+	}
+		
+	def prodInstSplit(Long id)
+	{		
+		def bomRoot = cyyjg.Utils.getRootBom(BomActual.get(id))
+		println "prodInstSplit, bomRoot: ${bomRoot}"
+		
+		def splitQuantity = Integer.parseInt(params["split_quantity"])
+		def remainQuantity = bomRoot.quantity - splitQuantity
+		
+		def splitRate = splitQuantity/bomRoot.quantity
+		def remainRate = remainQuantity/bomRoot.quantity
+						
+		ProdInstruct remainProdInst = bomRoot.prodInstruct
+		
+		
+		// 事物处理
+		ProdInstruct.withTransaction { status ->
+			ProdInstruct splitProdInst = new ProdInstruct(code:remainProdInst.code+"X",
+				saleOrderLine:remainProdInst.saleOrderLine, lastOne:remainProdInst.lastOne)
+			
+			BomActual splitBomRoot = null
+			
+			if (splitProdInst.save()) {
+				splitBomRoot = new BomActual(prodInstruct:splitProdInst, refBomStdId:bomRoot.refBomStdId, modifiedBy:session.user,
+				prod:bomRoot.prod, mark:bomRoot.mark, quantity:splitQuantity, unit:'千克')
+	
+				if (splitBomRoot.save()) {
+					bomRoot.children.each { child->
+	
+						def splitChildQuantity = splitRate * child.quantity
+						def p_child = new BomActual(prod:child.prod, mark:child.mark, quantity:splitChildQuantity, prodInstruct:splitProdInst,
+						refBomStdId:child?.refBomStdId, modifiedBy:session.user, unit:child?.unit).save(flush:true)
+	
+						splitBomRoot.addToChildren(p_child)
+						splitBomRoot.save(flush:true)
+	
+						child.children.each { grandChild ->
+							def splitGrandChildQuantity = splitRate * grandChild.quantity
+							def p_grandChild = new BomActual(prod:grandChild.prod, mark:grandChild.mark,
+							quantity:splitGrandChildQuantity, prodInstruct:splitProdInst, refBomStdId:grandChild.refBomStdId, modifiedBy:session.user,
+							unit:grandChild?.unit).save(flush:true)
+	
+							p_child.addToChildren(p_grandChild)
+							p_child.save(flush:true)
+						}
+					}
+					
+				} else {
+					flash.message = "1- 错误！Failed to split BOM ${bomRoot}"
+					status.setRollbackOnly()
+				}
+			} else {
+				flash.message = "2 - 错误！Failed to split BOM ${bomRoot}"
+				status.setRollbackOnly()
+			}
+			
+			if (splitBomRoot?.save()) {
+				bomRoot.children.each { child ->
+					child.children.each { grandChild ->
+						grandChild.quantity = remainRate * grandChild.quantity
+					}
+					child.quantity = remainRate * child.quantity
+				}
+				bomRoot.quantity = remainRate * bomRoot.quantity
+				bomRoot.save()
+			}
+			else {
+				flash.message = "3 - 错误！Failed to split BOM ${bomRoot}"
+				status.setRollbackOnly()
+			}
+		}
+							
 		redirect(action: "edit", id: id)
 	}
 }

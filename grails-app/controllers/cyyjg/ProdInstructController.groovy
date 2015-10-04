@@ -49,6 +49,10 @@ class ProdInstructController {
             return
         }
 
+		session.fromController = 'prodInstruct'
+		session.fromAction = 'edit'
+		session.fromId = id
+		
         [prodInstructObj: prodInstructObj]
     }
 

@@ -13,9 +13,11 @@
 	<g:select id="prod" name="prod.id" from="${cyyjg.Prod.findAllByCust(Customer.findByCode('0'))}" optionKey="id" required="" value="${bom?.prod?.id}" class="many-to-one" noSelection="['': '']"/>
 </g:else>
 
+<g:set var="isRootBom" value="${Utils.isRootBom(bom) }"></g:set>
+
 <%--<g:message code="bomActual.quantity.label" default="Quantity" /> --%>
-<g:textField class="qblank" name="quantity" size="3" value="${fieldValue(bean: bom, field: 'quantity')}" required=""/>
-<g:if test="${Utils.isRootBom(bom) }">千克 <g:hiddenField name="unit" value="千克" /></g:if>
+<g:textField class="qblank" readonly="${isRootBom }" name="quantity" size="3" value="${fieldValue(bean: bom, field: 'quantity')}" required=""/>
+<g:if test="${isRootBom}">千克 <g:hiddenField name="unit" value="千克" /></g:if>
 <g:else>克 <g:hiddenField name="unit" value="克" /></g:else>
 
 <%--<g:message code="bomActual.unit.label" default="Unit" />

@@ -3,10 +3,12 @@ class SecurityFilters {
 		
 	def filters = {
 		// At any Controllers and Actions, if NO user log in, just redirect to login page
+		// Please note, if we do redirect in views/index.gsp, the redirect will trigger below check again and throw exception
 		loginCheck(controller: '*', action: '*') {
 			before = {		
 				if (!session.user && actionName != "login" && actionName != "authenticate") {
 					flash.message = "请先登录!"
+					// println "controllerName is: ${controllerName}, actionName is: ${actionName}"
 					redirect(controller: "endUser", action: "login")
 					
 					if (actionName) {

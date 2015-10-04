@@ -1,7 +1,5 @@
 <%@ page import="cyyjg.ProdBase" %>
 
-
-
 <div class="fieldcontain ${hasErrors(bean: prodBaseObj, field: 'code', 'error')} ">
 	<label for="code">
 		<g:message code="prodBase.code.label" default="Code" />
@@ -39,7 +37,7 @@
 		<g:message code="prodBase.stdCost.label" default="Std Cost" />
 		
 	</label>
-	<g:field name="stdCost" value="${fieldValue(bean: prodBaseObj, field: 'stdCost')}"/>
+	<g:field type="number" name="stdCost" value="${fieldValue(bean: prodBaseObj, field: 'stdCost')}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: prodBaseObj, field: 'stdPrice', 'error')} ">
@@ -47,7 +45,7 @@
 		<g:message code="prodBase.stdPrice.label" default="Std Price" />
 		
 	</label>
-	<g:field name="stdPrice" value="${fieldValue(bean: prodBaseObj, field: 'stdPrice')}"/>
+	<g:field type="number" name="stdPrice" value="${fieldValue(bean: prodBaseObj, field: 'stdPrice')}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: prodBaseObj, field: 'agentPrice', 'error')} ">
@@ -55,7 +53,7 @@
 		<g:message code="prodBase.agentPrice.label" default="Agent Price" />
 		
 	</label>
-	<g:field name="agentPrice" value="${fieldValue(bean: prodBaseObj, field: 'agentPrice')}"/>
+	<g:field type="number" name="agentPrice" value="${fieldValue(bean: prodBaseObj, field: 'agentPrice')}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: prodBaseObj, field: 'batchPrice', 'error')} ">
@@ -63,7 +61,7 @@
 		<g:message code="prodBase.batchPrice.label" default="Batch Price" />
 		
 	</label>
-	<g:field name="batchPrice" value="${fieldValue(bean: prodBaseObj, field: 'batchPrice')}"/>
+	<g:field type="number" name="batchPrice" value="${fieldValue(bean: prodBaseObj, field: 'batchPrice')}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: prodBaseObj, field: 'minStock', 'error')} ">
@@ -71,7 +69,7 @@
 		<g:message code="prodBase.minStock.label" default="Min Stock" />
 		
 	</label>
-	<g:field name="minStock" value="${fieldValue(bean: prodBaseObj, field: 'minStock')}"/>
+	<g:field type="number" name="minStock" value="${fieldValue(bean: prodBaseObj, field: 'minStock')}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: prodBaseObj, field: 'unit', 'error')} ">

@@ -1,4 +1,5 @@
 <%@ page import="cyyjg.ProdBase" %>
+<%@ page import="cyyjg.CONSTANT" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -27,9 +28,28 @@
 				</g:eachError>
 			</ul>
 			</g:hasErrors>
-			<g:form method="post" >
+
+
+		<g:form class="fieldcontain" method="POST" enctype="multipart/form-data">
+			<label><g:message code="prodBase.imageName.label" default="imageName" /></label>
+			<!-- or use g:uploadForm which has enctype by default-->
+			<g:hiddenField name="id" value="${prodBaseObj?.id }" />
+			<input type="file" name="myFile"/>
+			<g:actionSubmit action="uploadImage" value="确定" />			
+		</g:form>
+		<g:if test="${params.imageName}">
+			&nbsp;&nbsp;&nbsp;&nbsp;当前图片：${params.imageName }
+			<g:img dir="${CONSTANT.PROD_IMAGE_DIR }" file="${params.imageName }"/>
+		</g:if>
+		<g:elseif test="${prodBaseObj?.imageName }">
+			&nbsp;&nbsp;&nbsp;&nbsp;当前图片：${prodBaseObj?.imageName }
+			<g:img dir="${CONSTANT.PROD_IMAGE_DIR }" file="${prodBaseObj?.imageName }"/>
+		</g:elseif>
+
+		<g:form method="post" >
 				<g:hiddenField name="id" value="${prodBaseObj?.id}" />
 				<g:hiddenField name="version" value="${prodBaseObj?.version}" />
+				<g:hiddenField name="imageName" value="${params?.imageName }" />
 				<fieldset class="form">
 					<g:render template="form"/>
 				</fieldset>
@@ -38,6 +58,7 @@
 					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" formnovalidate="" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
 				</fieldset>
 			</g:form>
+						
 		</div>
 	</body>
 </html>

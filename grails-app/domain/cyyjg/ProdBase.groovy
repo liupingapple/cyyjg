@@ -19,7 +19,9 @@ class ProdBase {
 	
 	String comment
 	
-	String unit = '克' // 标准计量单位
+	String unit = '克' // stdCost, stdPrice,..., minStock 的 标准计量单位
+	
+	String imageName
 	
 	Date dateCreated
 	Date lastUpdated
@@ -35,6 +37,7 @@ class ProdBase {
 		batchPrice nullable:true
 		minStock nullable:true
 		unit inList:cyyjg.CONSTANT.UNITs
+		imageName nullable:true
 		comment nullable:true, maxSize:1000		
     }
 	
