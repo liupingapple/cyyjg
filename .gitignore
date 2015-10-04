@@ -39,3 +39,4 @@ target-eclipse/
 
 /*.db
 /test
+/web-app/prod_images
