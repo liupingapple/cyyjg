@@ -83,7 +83,7 @@ session.fromId = saleOrderObj?.id
   <g:if test="${prodInstruct?.rootBomActual }">
 	<tr class="text-left" id="bom${prodInstruct?.rootBomActual?.id }" style="display: none">
 		<td colspan="6">
-			<g:render template="form" contextPath="../bomActual" model="[bomActualObj:prodInstruct?.rootBomActual]"></g:render>
+			<g:render template="form" contextPath="../bomActual" model="[bomActualObj:prodInstruct?.rootBomActual, readOnly:true]"></g:render>
 		</td>
 	</tr>
   </g:if>

@@ -40,6 +40,18 @@ class DeliveryController {
 
         [deliveryObj: deliveryObj]
     }
+	
+	// 打印
+	def print(Long id) {
+		def deliveryObj = Delivery.get(id)
+		if (!deliveryObj) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'delivery.label', default: 'Delivery'), id])
+			redirect(action: "list")
+			return
+		}
+
+		[deliveryObj: deliveryObj]
+	}
 
     def edit(Long id) {
         def deliveryObj = Delivery.get(id)

@@ -1,4 +1,4 @@
-
+<%@page import="cyyjg.CompGetNote"%>
 <%@page import="cyyjg.CONSTANT"%>
 <%@ page import="cyyjg.ProdInstruct"%>
 <!DOCTYPE html>
@@ -25,6 +25,7 @@
 								${flash.message}
 							</div>
 						</g:if>
+						<g:form controller="prodInstruct">
 						<table class="table table-bordered">
 							<thead>
 								<tr>
@@ -49,13 +50,20 @@
 								<g:each in="${prodInstructObjList}" status="i" var="prodInstructObj">
 									<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 										<td>
-											<g:checkBox name="selected${prodInstructObj?.rootBomActual?.id }" checked="false"/>领料
-											<g:link class="btn btn-primary btn-xs" controller="bomActual" action="edit" id="${prodInstructObj?.rootBomActual?.id }">
-												编辑
-											</g:link>
+											<g:if test="${prodInstructObj?.status == CONSTANT.INSTRUCT_STATUS_APPROVED_BY_FINANCE }">
+												<g:checkBox name="rootBomActual_selected" value="${prodInstructObj?.rootBomActual?.id }" checked="false"/>&nbsp;领料
+											</g:if>
+											<g:if test="${prodInstructObj?.status == CONSTANT.INSTRUCT_STATUS_CONFIRMED }">
+												<g:checkBox name="prodInstMselected" value="${prodInstructObj?.id }" checked="false"/>&nbsp;M审核
+											</g:if>
+											<g:if test="${prodInstructObj?.status == CONSTANT.INSTRUCT_STATUS_APPROVED_BY_MANAGER }">
+												<g:checkBox name="prodInstFselected" value="${prodInstructObj?.id }" checked="false"/>&nbsp;F审核
+											</g:if>							
 										</td>
-										<td>
-											${fieldValue(bean: prodInstructObj, field: "code")}
+										<td>											
+											<g:link controller="bomActual" action="edit" id="${prodInstructObj?.rootBomActual?.id }">
+												${fieldValue(bean: prodInstructObj, field: "code")}
+											</g:link>
 										</td>
 										
 										<td>
@@ -67,6 +75,9 @@
 										<td>
 											${fieldValue(bean: prodInstructObj, field: "status")}
 											<g:if test="${prodInstructObj?.rootBomActual?.batch}">批次：${prodInstructObj?.rootBomActual?.batch}</g:if>
+											<g:if test="${prodInstructObj?.status == CONSTANT.INSTRUCT_STATUS_COMPONENTS_GOT}">
+												领料单：<g:link action="showCompGetNote" params="[noteCode : prodInstructObj?.compGetNoteCode]">${prodInstructObj?.compGetNoteCode}</g:link>												
+											</g:if>
 										</td>
 										
 										<td>
@@ -75,7 +86,7 @@
 										</td>
 
 										<td>
-											${fieldValue(bean: prodInstructObj, field: "lastOne")}
+											<g:link controller="bomActual" action="edit" id="${prodInstructObj?.lastOne?.rootBomActual?.id }">${fieldValue(bean: prodInstructObj, field: "lastOne")}</g:link>
 										</td>
 
 										<td>
@@ -84,15 +95,26 @@
 
 									</tr>
 									<g:if test="${prodInstructObj?.rootBomActual }">
-									<tr id="bom${prodInstructObj?.rootBomActual?.id }" style="display: none">
-										<td colspan="7">
-											<g:render template="form" contextPath="../bomActual" model="[bomActualObj:prodInstructObj?.rootBomActual]"></g:render>
-										</td>
-									</tr>
+										<tr id="bom${prodInstructObj?.rootBomActual?.id }" style="display: none">
+											<%-- because of nested forms existing, we pass readOnly to below form and disabled the params in nested form --%>
+											<td colspan="7">
+												<g:render template="form" contextPath="../bomActual" model="[bomActualObj:prodInstructObj?.rootBomActual, readOnly:true]"></g:render>
+											</td>
+										</tr>
 									</g:if>
 								</g:each>
+								<tr class="text-center">
+									<td colspan="7">
+										<g:actionSubmit class="btn btn-info btn-sm" action="getComponents" value="领料单"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<g:radio name="approveByManagerRadio" value="approved"/>通过  <g:radio name="approveByManagerRadio" value="rejected"/>拒绝
+										<g:actionSubmit class="btn btn-success btn-sm" action="approveByManager" value="郭总审核"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<g:radio name="approveByFinanceRadio" value="approved"/>通过  <g:radio name="approveByFinanceRadio" value="rejected"/>拒绝
+										<g:actionSubmit class="btn btn-success btn-sm" action="approveByFinance" value="财务审核"/>
+									</td>
+								</tr>								
 							</tbody>
 						</table>
+						</g:form>
 
 						<div class="pagination">
 							<g:paginate total="${prodInstructObjTotal}" />

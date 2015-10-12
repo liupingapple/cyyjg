@@ -36,6 +36,8 @@ class SaleOrderController {
 		def cri = ProdInstruct.createCriteria()
 		def result = cri.list(max:1, sort:"id", order:"desc") {
 			ne ("status", CONSTANT.INSTRUCT_STATUS_DRAFT)
+			ne ("status", CONSTANT.INSTRUCT_STATUS_REJECTED_BY_MANAGER)
+			ne ("status", CONSTANT.INSTRUCT_STATUS_REJECTED_BY_FINANCE)
 			saleOrderLine {
 				eq ("prod", orderLine.prod)
 			}
@@ -49,55 +51,67 @@ class SaleOrderController {
 			rootBom4Reference = lastOne.rootBomActual
 		}
 		
-		ProdInstruct pinst = new ProdInstruct(code:"P-"+orderLine.saleOrder.code+"-"+orderLine.id, saleOrderLine:orderLine, lastOne:lastOne).save(flush: true)
-			
-		if (!pinst) {
-			render(view: "show", model: [pinst: pinst])
-			return
-		}
-		
-		def rate = orderLine.quantity/rootBomStd?.quantity
-		
-		def rootBomActual = new BomActual(prod:orderLine.prod, mark:"P", quantity:rate*rootBomStd?.quantity, prodInstruct:pinst, refBomStdId:rootBomStd?.id,
-			modifiedBy:session.user, unit:rootBomStd?.unit).save(flush:true, failOnError:true)
-		// new BomActual.save() will trigger prodInstruct.rootBomActual assigning value in afterInsert()
-			
-		if (!rootBomActual) {
-			render(view: "show", model: [rootBomActual:rootBomActual])
-			pinst.delete()
-			return
-		}
-			
-		rootBom4Reference.children.each { child->
-			def refBomStdId = child?.id
-			if (rootBom4Reference instanceof BomActual) {
-				refBomStdId = child?.refBomStdId
+		ProdInstruct.withTransaction { status->
+			// 生产单编码无需 带上订单代码， +orderLine.saleOrder.code+"-"
+			ProdInstruct pinst = new ProdInstruct(code:"P-"+orderLine.id, saleOrderLine:orderLine, lastOne:lastOne).save(flush: true)
+				
+			if (!pinst) {
+				status.setRollbackOnly()
+				render(view: "show", model: [pinst: pinst])
+				return
 			}
 			
-			def p_child = new BomActual(prod:child.prod, mark:child.mark.replaceFirst("S","P"), quantity:rate*child?.quantity, prodInstruct:pinst,
-			refBomStdId:refBomStdId, modifiedBy:session.user, unit:child?.unit).save(flush:true, failOnError:true)
+			def rateLastOne = orderLine.quantity/rootBom4Reference?.quantity
 			
-			rootBomActual.addToChildren(p_child)
-			rootBomActual.save(flush:true, failOnError:true)
-							
-			child.children.each { grandChild ->
-				def refBomStdId2 = grandChild?.id
+			def rootBomActual = new BomActual(prod:orderLine.prod, mark:"P", quantity:orderLine.quantity, prodInstruct:pinst, refBomStdId:rootBomStd?.id,
+				modifiedBy:session.user, unit:rootBomStd?.unit).save(flush:true, failOnError:true)
+			// new BomActual.save() will trigger prodInstruct.rootBomActual assigning value in afterInsert()
+				
+			if (!rootBomActual) {
+				status.setRollbackOnly()
+				flash.message = "生成生产单失败"
+				render(view: "show", model: [rootBomActual:rootBomActual])
+				// pinst.delete()
+				return
+			}
+				
+			rootBom4Reference.children.each { child->
+				def refBomStdId = child?.id
 				if (rootBom4Reference instanceof BomActual) {
-					refBomStdId2 = grandChild?.refBomStdId
+					refBomStdId = child?.refBomStdId
 				}
 				
-				def p_grandChild = new BomActual(prod:grandChild.prod, mark:grandChild.mark.replaceFirst("S","P"),
-					quantity:rate*grandChild?.quantity, prodInstruct:pinst, refBomStdId:refBomStdId2, modifiedBy:session.user,
-					unit:grandChild?.unit).save(flush:true, failOnError:true)
+				def p_child = new BomActual(prod:child.prod, mark:child.mark.replaceFirst("S","P"), quantity:rateLastOne*child?.quantity, prodInstruct:pinst,
+				refBomStdId:refBomStdId, modifiedBy:session.user, unit:child?.unit).save(flush:true, failOnError:true)
+				
+				rootBomActual.addToChildren(p_child)
+				if (!rootBomActual.save(flush:true) ) {					
+					status.setRollbackOnly()
+					flash.message = "生成生产单失败"
+				}
+								
+				child.children.each { grandChild ->
+					def refBomStdId2 = grandChild?.id
+					if (rootBom4Reference instanceof BomActual) {
+						refBomStdId2 = grandChild?.refBomStdId
+					}
 					
-				p_child.addToChildren(p_grandChild)
-				p_child.save(flush:true, failOnError:true)
+					def p_grandChild = new BomActual(prod:grandChild.prod, mark:grandChild.mark.replaceFirst("S","P"),
+						quantity:rateLastOne*grandChild?.quantity, prodInstruct:pinst, refBomStdId:refBomStdId2, modifiedBy:session.user,
+						unit:grandChild?.unit).save(flush:true, failOnError:true)
+						
+					p_child.addToChildren(p_grandChild)
+					p_child.save(flush:true, failOnError:true)
+				}
 			}
+			
+			if (!pinst.save(flush:true)) {				
+				status.setRollbackOnly()
+				flash.message = "生成生产单失败"
+			}
+			
+			orderLine.saleOrder.status = CONSTANT.ORDER_STATUS_CONFIRMED
 		}
-		
-		pinst.save(flush:true, failOnError:true)
-		
-		orderLine.saleOrder.status = CONSTANT.ORDER_STATUS_CONFIRMED
 		
 		redirect(action: "show", id: orderLine.saleOrder.id)
 	}

@@ -32,8 +32,7 @@
 		
 	</label>
 	<g:select id="prodBase" name="prodBase.id" disabled="${prodEdit_disabled }" from="${cyyjg.ProdBase.list()}" optionKey="id" value="${prodObj?.prodBase?.id}" class="many-to-one" noSelection="['null': '']" 
-		onchange="${remoteFunction(controller:'prod', action:'showProdBase', update:'prodBaseItems', params:'\'prodBaseId=\' + this.value' )}"/>
-		
+		onchange="${remoteFunction(controller:'prod', action:'showProdBase', update:'prodBaseItems', params:'\'prodBaseId=\' + this.value' )}"/>		
 </div>
 
 <div id="prodBaseItems">   <!-- for update by above remoteFunction -->

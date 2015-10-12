@@ -152,11 +152,13 @@ class BomActualController {
 			childTotalQuantity += child.quantity
 			
 			def grandChildTotalQuantity = 0
+			def grandChildNum = 0
 			child.children.each { grandChild ->
+				grandChildNum++
 				grandChildTotalQuantity += grandChild.quantity
 			}
 			
-			if (child.quantity != grandChildTotalQuantity) {
+			if (grandChildNum > 0 && child.quantity != grandChildTotalQuantity) {
 				flash.message += "${child}的数量与其所有下级组成成分数量之和不一致！<br>"
 			}
 		}
@@ -173,15 +175,83 @@ class BomActualController {
 		redirect(action: "edit", id: id)
 	}
 	
+	def prodInstApproveByManager(Long id)
+	{
+		def bomRoot = cyyjg.Utils.getRootBom(BomActual.get(id))
+		
+		if (params.approveByManager == 'approved') {
+			bomRoot.prodInstruct.status = CONSTANT.INSTRUCT_STATUS_APPROVED_BY_MANAGER
+			if (params.comment) {
+				bomRoot.prodInstruct.comment = params.comment
+			}
+		} else if (params.approveByManager == 'rejected') {
+			bomRoot.prodInstruct.status = CONSTANT.INSTRUCT_STATUS_REJECTED_BY_MANAGER
+			if (params.comment) {
+				bomRoot.prodInstruct.comment = params.comment
+			}
+		} else {
+			flash.message = "Error: params.approveByManager is: ${approveByManager}"
+		}		
+		
+		if (bomRoot.prodInstruct.save(failOnError:true)) {
+			flash.message = "审批完成"
+		} else {
+			flash.message = "审批失败"
+		}
+		
+		redirect(action: "edit", id: id)
+	}
+	
+	def prodInstApproveByFinance(Long id)
+	{
+		def bomRoot = cyyjg.Utils.getRootBom(BomActual.get(id))
+		
+		if (params.approveByFinance == 'approved') {
+			bomRoot.prodInstruct.status = CONSTANT.INSTRUCT_STATUS_APPROVED_BY_FINANCE
+			if (params.comment) {
+				bomRoot.prodInstruct.comment = params.comment
+			}
+		} else if (params.approveByFinance == 'rejected') {
+			bomRoot.prodInstruct.status = CONSTANT.INSTRUCT_STATUS_REJECTED_BY_FINANCE
+			if (params.comment) {
+				bomRoot.prodInstruct.comment = params.comment
+			}
+		} else {
+			flash.message = "Error: params.approveByFinance is: ${approveByFinance}"
+		}
+		
+		if (bomRoot.prodInstruct.save(failOnError:true)) {
+			flash.message = "审批完成"
+		} else {
+			flash.message = "审批失败"
+		}
+		
+		redirect(action: "edit", id: id)
+	}
+	
 	def prodInstProduced(Long id)
 	{
 		def bomRoot = cyyjg.Utils.getRootBom(BomActual.get(id))
 		
-		bomRoot?.prodInstruct?.status = CONSTANT.INSTRUCT_STATUS_PRODUCED
+		bomRoot?.prodInstruct?.status = CONSTANT.INSTRUCT_STATUS_PRODUCED		
 		bomRoot?.prodInstruct?.produceFinishedDate = new Date()
-		bomRoot?.prodInstruct?.save(failOnError:true)
+		def dateStr = bomRoot?.prodInstruct?.produceFinishedDate.format("yyMMdd")
 		
-		bomRoot.batch = bomRoot?.prodInstruct?.produceFinishedDate.toString()
+		def cri = BomActual.createCriteria()
+		def seq = cri.get {
+			projections {
+				rowCount()
+			}
+			
+			eq ('mark', 'P')
+			like ('batch', "${dateStr}%")
+			eq ('prod', bomRoot.prod)			
+		}
+		bomRoot?.batch = dateStr+"-${seq+1}"
+		
+		bomRoot?.prodInstruct?.save(failOnError:true)
+				
+		bomRoot.save()
 		
 		SaleOrderLine orderLine = bomRoot?.prodInstruct?.saleOrderLine
 		

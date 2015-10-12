@@ -1,3 +1,4 @@
+<%@page import="cyyjg.CONSTANT"%>
 <div class="fieldcontain ${hasErrors(bean: prodBaseObj, field: 'type', 'error')} ">
 	<label for="type">
 		<g:message code="prodBase.type.label" default="type" />
@@ -52,4 +53,11 @@
 		<g:message code="prodBase.minStock.label" default="minStock" />
 	</label>
 	<g:textField name="minStock" disabled="true" value="${prodBaseObj?.minStock? prodBaseObj?.minStock : prodObj?.prodBase?.minStock}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: prodBaseObj, field: 'imageName', 'error')} ">
+	<label for="imageName">
+		<g:message code="prodBase.imageName.label" default="imageName" />
+	</label>
+	<g:img dir="${CONSTANT.PROD_IMAGE_DIR }" file="${prodBaseObj?.imageName }"/>
 </div>

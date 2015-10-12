@@ -16,7 +16,10 @@ class ProdInstruct {
 	
 	String status = CONSTANT.INSTRUCT_STATUS_DRAFT
 	
-	Date produceFinishedDate	
+	Date produceFinishedDate
+	
+	// 领料单号
+	String compGetNoteCode
 	
 	String comment
 	
@@ -37,6 +40,7 @@ class ProdInstruct {
 		lastOne nullable:true
 		status inList:CONSTANT.INSTRUCT_STATUSes
 		produceFinishedDate nullable:true
+		compGetNoteCode nullable:true
 		comment nullable:true, maxSize:1000
     }
 	

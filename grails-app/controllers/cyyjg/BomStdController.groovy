@@ -46,7 +46,7 @@ class BomStdController {
 		redirect(action: "edit", id: bomStdObj.id)
     }
 
-    def save() {		
+    def save() {
         def bomStdObj = new BomStd(params)   
 		def parentBomStd = BomStd.get(params.parentBomId)
 		
