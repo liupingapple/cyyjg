@@ -109,7 +109,7 @@ function tog(new_xy) {
 				<g:form controller="bomActual" action="prodInstApproveByManager" id="${bomActualObj?.id }">
 					<g:radio name="approveByManager" value="approved" checked="true"/>通过  <g:radio name="approveByManager" value="rejected"/>拒绝
 					, 备注：<g:textField name="comment" value="${prodInstruct.comment }"/>
-					<g:submitButton name="郭总审核" class="btn btn-success btn-sm"/>
+					<g:submitButton name="经理审核" class="btn btn-success btn-sm"/>
 				</g:form>
 			</g:if>
 			

@@ -17,7 +17,8 @@
 			${saleOrderObj?.cust }
 		</g:if>
 		<g:else>
-			<g:select id="cust" disabled="${disabled }" name="cust.id" from="${cyyjg.Customer.list()}" optionKey="id" required="" value="${saleOrderObj?.cust?.id}" class="many-to-one"/>
+			<g:select id="cust" disabled="${disabled }" name="cust.id" from="${cyyjg.Customer.list()}" optionKey="id" required="" value="${saleOrderObj?.cust?.id}" class="many-to-one"
+			 onchange="${remoteFunction(controller:'saleOrder', action:'showMoreFields', update:'moreFieldsElemId', params:'\'custId=\' + this.value' )}"/>
 		</g:else>
 	</td>
 	
@@ -50,6 +51,11 @@
 	</td>
   <!-- row -->
   </tr>
+  
+  <tr id="moreFieldsElemId">
+  	<g:render template="moreFields"></g:render>
+  </tr>
+  
   <!-- 订单头不用交货日期 -->
   <tr>
   	<td class="text-right">

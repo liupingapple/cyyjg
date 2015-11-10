@@ -32,10 +32,11 @@ class Customer {
 	String deliveryAddr3
 	
 	String paymentItems	
-	String paymentCondition = '现金'
-	
+	String paymentCondition = '现金'	
+	String packageType	
 	String currency = '人民币' // 币种
 	boolean isTax  // 是否含税
+	
 	Date billDate // 对账日期
 	
 	Date dateCreated
@@ -65,10 +66,11 @@ class Customer {
 		deliveryAddr3 nullable:true
 		
 		paymentItems nullable:true
-		paymentCondition inList:['现金', '月结30天','月结60天','月结90天','其他']
-		
-		currency nullable:true, inList:['人民币', '美元']
+		paymentCondition nullable:true, inList:CONSTANT.PAYMENTs		
+		packageType nullable:true		
+		currency nullable:true, inList:CONSTANT.CURRENCYs
 		isTax nullable:true
+		
 		billDate nullable:true
 		
 		comment nullable:true, maxSize:1000

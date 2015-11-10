@@ -1,6 +1,9 @@
 <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap.min.css')}" type="text/css">
+<script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-1.11.3.min.js')}"></script> <!-- jquery.js 必须放在 bootstrap.js前面 -->
+<script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.jqprint-0.3.js')}"></script>
+<script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-migrate-1.1.0.js')}"></script> 
 <p>
-<div class="container">
+<div id="printArea" class="container">
 <div class="panel panel-warning">
 
 	<div class="panel-heading">
@@ -48,4 +51,16 @@
 	</div>--%>
 	
 </div>
+</div>
+
+<!-- 打印 -->
+<script type="text/javascript">
+ function myPrint(){
+     $("#printArea").jqprint();
+ }    
+</script>
+
+<div class="container">
+	<input class="btn btn-success btn-sm" type="button" onclick="myPrint()" value="打印"/>
+	<g:link class="btn btn-success btn-sm" action="list">返回</g:link>
 </div>

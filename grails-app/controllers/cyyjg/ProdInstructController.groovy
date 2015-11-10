@@ -30,8 +30,10 @@ class ProdInstructController {
 			if (prodInstruct) {
 				if (params.approveByManagerRadio == 'approved') {
 					prodInstruct.status = CONSTANT.INSTRUCT_STATUS_APPROVED_BY_MANAGER
+					prodInstruct.saleOrderLine.saleOrder.status = CONSTANT.ORDER_STATUS_PROCEEDING // 订单/生产单处理中
 				} else if (params.approveByManagerRadio == 'rejected') {
 					prodInstruct.status = CONSTANT.INSTRUCT_STATUS_REJECTED_BY_MANAGER
+					prodInstruct.saleOrderLine.saleOrder.status = CONSTANT.ORDER_STATUS_HOLD // 如果审批不通过, hold 住订单
 				} else {
 					flash.message = "Error: params.approveByManagerRadio is: ${params.approveByManagerRadio}"
 				}
@@ -40,12 +42,16 @@ class ProdInstructController {
 					flash.message = "审批${prodInstruct}失败"
 					return
 				}
+				else {
+					prodInstruct.saleOrderLine.saleOrder.save()
+				}
 			}
 			else {
 				flash.message = "没有操作合适的生产单"
-			}
+			}		
+			
 		}
-		
+				
 		redirect(action: "list")
 	}
 	
@@ -59,16 +65,21 @@ class ProdInstructController {
 			def prodInstruct = ProdInstruct.get(id)
 			if (prodInstruct) {
 				if (params.approveByFinanceRadio == 'approved') {
+					prodInstruct.saleOrderLine.saleOrder.status = CONSTANT.ORDER_STATUS_PROCEEDING // 订单/生产单处理中
 					prodInstruct.status = CONSTANT.INSTRUCT_STATUS_APPROVED_BY_FINANCE
 				} else if (params.approveByFinanceRadio == 'rejected') {
 					prodInstruct.status = CONSTANT.INSTRUCT_STATUS_REJECTED_BY_FINANCE
+					prodInstruct.saleOrderLine.saleOrder.status = CONSTANT.ORDER_STATUS_HOLD // 如果审批不通过, hold 住订单
 				} else {
 					flash.message = "Error: params.approveByManagerRadio is: ${params.approveByFinanceRadio}"
-				}
+				}				
 				
 				if (!prodInstruct.save()) {
 					flash.message = "审批${prodInstruct}失败"
 					return
+				}
+				else {
+					prodInstruct.saleOrderLine.saleOrder.save()
 				}
 			}
 			else {
@@ -79,6 +90,7 @@ class ProdInstructController {
 		redirect(action: "list")
 	}
 	
+	// 生成 领料单
 	def getComponents()
 	{
 		def rootBomActualIdList = []

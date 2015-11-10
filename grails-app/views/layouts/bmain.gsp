@@ -28,6 +28,10 @@
 	<!-- We need to load JQuery firstly, maybe some customer JS will be defined in gsp file -->
 	<!-- <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script> 不用网络上的js, 已下载到本地 -->
 	<script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-1.11.3.min.js')}"></script> <!-- jquery.js 必须放在 bootstrap.js前面 -->
+	<script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.jqprint-0.3.js')}"></script>
+	<!-- jqprint needs jquery-migrate-1.0.0.js because of uncaught typeerror Cannot read property 'opera'-->	
+	<script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-migrate-1.1.0.js')}"></script> 
+	
 	<script type="text/javascript" src="${resource(dir: 'js', file: 'bootstrap.min.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: 'toggle-sidebar.js')}"></script>
 		
@@ -46,7 +50,7 @@
 		          <span class="icon-bar"></span>
 		          <span class="icon-bar"></span>
 		        </button>
-		        <a class="navbar-brand" href="#">CYYJG</a>
+		        <a class="navbar-brand" href="#menu-toggle" id="menu-toggle">CYYJG</a> <!-- 展开/搜索侧边栏 -->
 		      </div>
 		      <div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-right">		          	
@@ -83,7 +87,7 @@
 		</nav>
 		
 		<g:layoutBody /> 
-			    
+			   
 		<%--
 		<footer class="footer">
 		  <div class="container text-center">

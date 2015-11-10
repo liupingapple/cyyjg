@@ -16,16 +16,17 @@ class CONSTANT {
 	// '新建(可删除)', '确认(可下生产单，可修改地址等不可删除)', '已备料(生产BOM确认，已下领料单)', '生产中', '完成可送货'
 	// The default value in domain SaleOrder.groovy is ORDER_STATUSes[0]='新建'
 	final static String ORDER_STATUS_NEW = '新建'
-	final static String ORDER_STATUS_CONFIRMED = '已确认'  // 审核通过
+	final static String ORDER_STATUS_PROCEEDING = '订单/生产单处理中' 
+	final static String ORDER_STATUS_HOLD = '订单暂停'	
 	final static String ORDER_STATUS_FINISHED = '已完成'	
 	final static String ORDER_STATUS_CLOSED = '已关闭'
 	final static String ORDER_STATUS_CANCELED = '已取消'
-	final static ORDER_STATUSes = [ORDER_STATUS_NEW, ORDER_STATUS_CONFIRMED, ORDER_STATUS_FINISHED, ORDER_STATUS_CLOSED, ORDER_STATUS_CANCELED]
+	final static ORDER_STATUSes = [ORDER_STATUS_NEW, ORDER_STATUS_PROCEEDING, ORDER_STATUS_HOLD, ORDER_STATUS_FINISHED, ORDER_STATUS_CLOSED, ORDER_STATUS_CANCELED]
 	
 	final static String INSTRUCT_STATUS_DRAFT = '草稿'
 	final static String INSTRUCT_STATUS_CONFIRMED = '已确定'
-	final static String INSTRUCT_STATUS_APPROVED_BY_MANAGER = '郭总审核通过'	
-	final static String INSTRUCT_STATUS_REJECTED_BY_MANAGER = '郭总审核不通过'	
+	final static String INSTRUCT_STATUS_APPROVED_BY_MANAGER = '经理审核通过'	
+	final static String INSTRUCT_STATUS_REJECTED_BY_MANAGER = '经理审核不通过'	
 	final static String INSTRUCT_STATUS_APPROVED_BY_FINANCE = '财务审核通过'
 	final static String INSTRUCT_STATUS_REJECTED_BY_FINANCE = '财务审核不通过'
 	final static String INSTRUCT_STATUS_COMPONENTS_GOT = '领料-生产'
@@ -49,6 +50,9 @@ class CONSTANT {
 	final static AM_PM_LIST = ["", "下午", "上午"]
 	
 	final static String PROD_IMAGE_DIR = "prod_images";
+	
+	final static PAYMENTs = ['现金', '月结30天','月结60天','月结90天','其他']
+	final static CURRENCYs = ['人民币', '美元', '日元', '欧元','港币','其他-具体请见备注']
 	
 	final static ArrayList PROVINCEs = [
 		'安徽',

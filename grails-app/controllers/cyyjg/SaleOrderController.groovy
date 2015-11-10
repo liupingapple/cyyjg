@@ -109,11 +109,27 @@ class SaleOrderController {
 				status.setRollbackOnly()
 				flash.message = "生成生产单失败"
 			}
-			
-			orderLine.saleOrder.status = CONSTANT.ORDER_STATUS_CONFIRMED
+						
 		}
 		
 		redirect(action: "show", id: orderLine.saleOrder.id)
+	}
+	
+	def showMoreFields()
+	{
+		println "params: ${params}"
+		Customer cust = Customer.get(params.custId)
+		println "cust: ${cust}, ${cust?.paymentCondition}"
+		
+		SaleOrder initSaleOrder = new SaleOrder(params)
+		
+		initSaleOrder.paymentCondition = cust.paymentCondition
+		initSaleOrder.currency = cust.currency
+		initSaleOrder.isTax = cust.isTax
+		initSaleOrder.packageType = cust.packageType
+		initSaleOrder.paymentItems = cust.paymentItems
+		
+		render(template:"moreFields", model:[saleOrderObj : initSaleOrder])
 	}
 	
 	// below method will generate all prodInstruct of order
@@ -189,9 +205,7 @@ class SaleOrderController {
 			
 			pinst.save(flush:true, failOnError:true)
 		}
-		
-		saleOrderObj.status = CONSTANT.ORDER_STATUS_CONFIRMED
-		
+				
 		redirect(action: "show", id: saleOrderObj.id)
 	}
 	
@@ -228,11 +242,12 @@ class SaleOrderController {
             render(view: "create", model: [saleOrderObj: saleOrderObj])
             return
         }
-		
+				
 		// def currSeq = SaleOrder.list()*.id.max()+1 // 目前id最大值 + 1
 		// saleOrderObj.code = "C"+params['cust.id']+"-"+params['orderSource.id']+"-"+params['signDate'].format('yyMMdd')+"-"+currSeq
 		
 		saleOrderObj.code = "${saleOrderObj.cust.code}-${saleOrderObj.orderSource.code}${saleOrderObj.signDate.format('yyMMdd')}-${saleOrderObj.id}"
+		
 		saleOrderObj.save()		
 		
         flash.message = message(code: 'default.created.message', args: [message(code: 'saleOrder.label', default: 'SaleOrder'), saleOrderObj.id])

@@ -89,7 +89,7 @@ session.fromId = saleOrderObj?.id
   </g:if>
   </g:each>
   
-  <g:if test="${saleOrderObj?.status == cyyjg.CONSTANT.ORDER_STATUS_NEW || saleOrderObj?.status == cyyjg.CONSTANT.ORDER_STATUS_CONFIRMED}">
+  <g:if test="${saleOrderObj?.status == cyyjg.CONSTANT.ORDER_STATUS_NEW || saleOrderObj?.status == cyyjg.CONSTANT.ORDER_STATUS_PROCEEDING}">
   <g:form name="form_insertSaleOrderLine" controller="saleOrder" name="orderLineForm" method="post">
   <g:hiddenField name="saleOrder.id" value="${saleOrderObj?.id }"/>
   <tr>

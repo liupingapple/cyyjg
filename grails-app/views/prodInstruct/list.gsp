@@ -107,7 +107,7 @@
 									<td colspan="7">
 										<g:actionSubmit class="btn btn-info btn-sm" action="getComponents" value="领料单"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										<g:radio name="approveByManagerRadio" value="approved"/>通过  <g:radio name="approveByManagerRadio" value="rejected"/>拒绝
-										<g:actionSubmit class="btn btn-success btn-sm" action="approveByManager" value="郭总审核"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<g:actionSubmit class="btn btn-success btn-sm" action="approveByManager" value="经理审核"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										<g:radio name="approveByFinanceRadio" value="approved"/>通过  <g:radio name="approveByFinanceRadio" value="rejected"/>拒绝
 										<g:actionSubmit class="btn btn-success btn-sm" action="approveByFinance" value="财务审核"/>
 									</td>
@@ -121,7 +121,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div>			
 		</div>
 
 	</div>
