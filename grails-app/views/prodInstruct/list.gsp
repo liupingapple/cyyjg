@@ -1,6 +1,7 @@
 <%@page import="cyyjg.CompGetNote"%>
 <%@page import="cyyjg.CONSTANT"%>
 <%@ page import="cyyjg.ProdInstruct"%>
+<%@ page import="cyyjg.Delivery"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -90,6 +91,11 @@
 										</td>
 
 										<td>
+											<g:set var="delivery" value="${Delivery.findByProdInstruct(prodInstructObj) }"></g:set>
+											<g:if test="${delivery}">
+												<label>送货单：</label>
+												<g:link controller="delivery" action="show" id="${delivery.id }">${delivery }</g:link><br>			
+											</g:if>
 											${fieldValue(bean: prodInstructObj, field: "comment")}
 										</td>
 
@@ -104,21 +110,23 @@
 									</g:if>
 								</g:each>
 								<tr class="text-center">
-									<td colspan="7">
+									<td colspan="7">										
 										<g:actionSubmit class="btn btn-info btn-sm" action="getComponents" value="领料单"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										<g:radio name="approveByManagerRadio" value="approved"/>通过  <g:radio name="approveByManagerRadio" value="rejected"/>拒绝
 										<g:actionSubmit class="btn btn-success btn-sm" action="approveByManager" value="经理审核"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										<g:radio name="approveByFinanceRadio" value="approved"/>通过  <g:radio name="approveByFinanceRadio" value="rejected"/>拒绝
 										<g:actionSubmit class="btn btn-success btn-sm" action="approveByFinance" value="财务审核"/>
 									</td>
-								</tr>								
+								</tr>
 							</tbody>
-						</table>
+						</table>						
 						</g:form>
 
 						<div class="pagination">
 							<g:paginate total="${prodInstructObjTotal}" />
 						</div>
+						<p>
+						操作说明：<br>请选择上面面操作栏上的生产单，再点击相应按钮操作。一次可以生成多个生产单的领料单，也可以同时审核多个生成单。生产单审核不通过的订单会被hold住。<br>如果操作栏没有复选框，说明该生产单BOM还未确认或者已经完成，对于还未确认（即状态为草稿）的生产单，您可以点击生产单编号，进入生产单详细界面，点击“生产BOM确认”按钮
 					</div>
 				</div>
 			</div>			

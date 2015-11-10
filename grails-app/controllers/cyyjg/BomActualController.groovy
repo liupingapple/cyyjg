@@ -181,11 +181,13 @@ class BomActualController {
 		
 		if (params.approveByManager == 'approved') {
 			bomRoot.prodInstruct.status = CONSTANT.INSTRUCT_STATUS_APPROVED_BY_MANAGER
+			bomRoot.prodInstruct.saleOrderLine.saleOrder.status = CONSTANT.ORDER_STATUS_PROCEEDING // 订单/生产单处理中
 			if (params.comment) {
 				bomRoot.prodInstruct.comment = params.comment
 			}
 		} else if (params.approveByManager == 'rejected') {
 			bomRoot.prodInstruct.status = CONSTANT.INSTRUCT_STATUS_REJECTED_BY_MANAGER
+			bomRoot.prodInstruct.saleOrderLine.saleOrder.status = CONSTANT.ORDER_STATUS_HOLD // 如果审批不通过, hold 住订单
 			if (params.comment) {
 				bomRoot.prodInstruct.comment = params.comment
 			}
@@ -195,6 +197,7 @@ class BomActualController {
 		
 		if (bomRoot.prodInstruct.save(failOnError:true)) {
 			flash.message = "审批完成"
+			bomRoot.prodInstruct.saleOrderLine.saleOrder.save()
 		} else {
 			flash.message = "审批失败"
 		}
@@ -208,11 +211,13 @@ class BomActualController {
 		
 		if (params.approveByFinance == 'approved') {
 			bomRoot.prodInstruct.status = CONSTANT.INSTRUCT_STATUS_APPROVED_BY_FINANCE
+			bomRoot.prodInstruct.saleOrderLine.saleOrder.status = CONSTANT.ORDER_STATUS_PROCEEDING // 订单/生产单处理中
 			if (params.comment) {
 				bomRoot.prodInstruct.comment = params.comment
 			}
 		} else if (params.approveByFinance == 'rejected') {
 			bomRoot.prodInstruct.status = CONSTANT.INSTRUCT_STATUS_REJECTED_BY_FINANCE
+			bomRoot.prodInstruct.saleOrderLine.saleOrder.status = CONSTANT.ORDER_STATUS_HOLD // 如果审批不通过, hold 住订单
 			if (params.comment) {
 				bomRoot.prodInstruct.comment = params.comment
 			}
@@ -222,6 +227,7 @@ class BomActualController {
 		
 		if (bomRoot.prodInstruct.save(failOnError:true)) {
 			flash.message = "审批完成"
+			bomRoot.prodInstruct.saleOrderLine.saleOrder.save()
 		} else {
 			flash.message = "审批失败"
 		}

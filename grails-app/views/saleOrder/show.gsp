@@ -156,7 +156,7 @@
 				    <th style="width:23%">产品</th>
 				    <th style="width:15%">数量(千克)</th>
 				    <th style="width:10%">价格</th>
-				    <th style="width:15%">总价(元)</th>
+				    <th style="width:15%">金额(元)</th>
 				    <th style="width:12%">交货日期</th>
 				    <th>备注</th>
 				  </tr>

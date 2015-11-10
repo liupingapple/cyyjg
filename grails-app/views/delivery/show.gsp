@@ -32,7 +32,7 @@
 						 	<h6 class="text-center"><strong>电话：</strong>0769-83849878&nbsp;&nbsp;&nbsp;<strong>传真：</strong>0769-83849928</h6>
 						 	<div class="row">
 						 		<div class="col-sm-1"></div>
-						 		<div class="col-sm-6 text-center"><h5><strong>客户</strong>：${deliveryObj.saleOrder.cust}</h5></div>   
+						 		<div class="col-sm-6 text-left"><h5><strong>客户</strong>：${deliveryObj.saleOrder.cust}</h5></div>   
 						 		<div class="col-sm-5 text-center"><strong>送货单编号</strong>：${deliveryObj.code}</div>
 						 	</div>				 	
 							<table class="table table-bordered">
@@ -50,7 +50,10 @@
 							<table class="table table-bordered text-center">
 							  <tr>
 							    <th style="width:23%">产品</th>
-							    <th style="width:15%">数量(千克)</th>
+							    <th style="width:12%">数量</th>
+							    <th style="width:12%">单位</th>
+							    <th style="width:12%">单价</th>
+							    <th style="width:12%">金额</th>
 							    <th style="width:12%">交货日期</th>
 							    <th>备注</th>
 							  </tr>
@@ -58,7 +61,9 @@
 							  <tr class="text-center">				   	
 							    <td>${deliveryObj?.prod}</td>
 							    <td>${deliveryObj?.saleOrderLine?.quantity}</td>
-							    				         			    
+							    <td>${deliveryObj?.saleOrderLine?.unit}</td>							    
+							    <td>${deliveryObj?.saleOrderLine?.price }</td>					    
+					    		<td>${ new java.text.DecimalFormat("0.00").format(deliveryObj?.saleOrderLine.quantity*deliveryObj?.saleOrderLine.price) }</td>
 							    <td><g:formatDate date="${deliveryObj?.saleOrderLine?.deliveryDate}" format="yyyy-MM-dd"/>&nbsp;&nbsp;&nbsp;${orderLine?.am_pm}
 							    </td>
 							    

@@ -62,9 +62,9 @@ function tog(new_xy) {
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-md-4">
-						<label>生产单:</label>${prodInstruct?.code }
-						&nbsp;&nbsp;&nbsp;<g:link controller="saleOrder" action="show" id="${prodInstruct?.saleOrderLine?.saleOrder?.id }">查看订单</g:link>
-						<%--<label>订单单:</label><g:link controller="saleOrder" action="show" id="${prodInstruct?.saleOrderLine?.saleOrder?.id }">${prodInstruct?.saleOrderLine?.saleOrder?.code }</g:link>--%>
+						<label>生产单:</label>${prodInstruct?.code }						
+						&nbsp;&nbsp;&nbsp;<g:link controller="prodInstruct" action="list">返回生产单列表</g:link>
+						<%--<label>订单:</label><g:link controller="saleOrder" action="show" id="${prodInstruct?.saleOrderLine?.saleOrder?.id }">${prodInstruct?.saleOrderLine?.saleOrder?.code }</g:link>--%>
 				</div>
 				<div class="col-md-4">
 						<label>产品:</label>
@@ -128,7 +128,7 @@ function tog(new_xy) {
 			
 			<g:if test="${delivery}">
 				<p><label>送货单：</label>
-				<g:link controller="delivery" action="print" id="${delivery.id }">${delivery }</g:link> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;			
+				<g:link controller="delivery" action="show" id="${delivery.id }">${delivery }</g:link> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;			
 			</g:if>
 		</div>
 	</div>
