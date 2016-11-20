@@ -31,6 +31,7 @@
 
 # "temporary" build files
 /target
+<<<<<<< HEAD
 
 target-eclipse/
 .settings
@@ -40,3 +41,5 @@ target-eclipse/
 /*.db
 /test
 /web-app/prod_images
+=======
+>>>>>>> d82c46dfcdbba4b74e415cd21c9dd16a83ed58b1
